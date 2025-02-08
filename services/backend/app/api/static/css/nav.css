@@ -1,0 +1,144 @@
+nav {
+    overflow: hidden;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #575757;
+}
+
+nav ul {
+    list-style: none;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* General Navbar Styling */
+.navbar {
+    overflow: hidden;
+    border: #000000 !important;
+    border-radius: 0rem 0rem 1rem 1rem !important;
+    border-style: groove !important;
+    border-bottom: 2px solid #000 !important;
+    background-image: linear-gradient(to top, rgba(33, 53, 71, 0.50), rgb(33, 53, 71)) !important;
+    transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.navbarNav {
+    display: inline-flex;
+    border: #000000;
+    border-radius: 1rem 0rem 1rem 1rem;
+    border-style: groove;
+    border-bottom: 2px solid #000;
+    background-image: linear-gradient(to top, rgba(33, 53, 71, 0.50), rgb(33, 53, 71));    transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    align-self: flex-end;
+    flex: auto;
+    text-align: end;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.navbarNavscroll {
+    top: 0;
+}
+
+.navbar-brand {
+    align-items: center;
+}
+
+.navbar-brand img.logo-image {
+    margin-top: 2rem;
+    height: 5rem;
+}
+
+.navbar-brand span {
+    margin: 0%;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin: 0 10px;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff;
+}
+
+.navbar-nav.social {
+    display: inline-flex;
+}
+
+.navbar-nav.social .nav-link i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav.social .nav-link i:hover {
+    color: #007bff;
+}
+
+.navbar-nav.mx-auto {
+    display: inline-flex;
+}
+
+.navbar-toggler {
+    overflow: hidden;
+}
+
+#navbarNav {
+    background-color: #333; /* Black background color */
+    position: fixed; /* Make it stick/fixed */
+    top: 0; /* Stay on top */
+    width: 100%; /* Full width */
+    transition: top 0.3s; /* Transition effect when sliding down (and up) */
+  }
+  
+  /* Style the navbar links */
+  #navbarNav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+  }
+  
+  #navbarNav a:hover {
+    background-color: #ddd;
+    color: black;
+  }

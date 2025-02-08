@@ -1,0 +1,250 @@
+/* Promo Section */
+.regPromo {
+    height: 65vh;
+    text-align: center;
+    padding: 20px;
+}
+
+.regPromo h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.regPromo p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.regPromo .btn {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+}
+
+.regPromo.btn:hover {
+    background: #0056b3;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    background: #f4f4f4;
+    border-bottom: 2px solid #252627;
+    padding: 50px 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #333;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 15px 0 30px;
+}
+
+.hero .btn {
+    display: inline-block;
+    background: #007BFF;
+    color: #fff;
+    text-decoration-color: #1a1a1a;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.hero .btn:hover {
+    background: #0056b3;
+}
+
+.hero .btn-primary {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+}
+
+.hero .btn-secondary {
+    background: #6c757d;
+}  
+
+.hero .btn-secondary:hover {
+    background: #546980;
+}
+
+.hero-image {
+    width: 100%;
+    margin-top: -2rem;
+}
+
+.hero-text {
+    position: relative; 
+    color: black;
+    transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    font-size: 12px;
+    margin-top: -15rem;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    color: #ff6000;
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.hero-text:hover h1 {
+    color: #000000;
+    transform: scale(1.05);
+    text-shadow: 2px 2px 2px #fffefe;
+}
+
+.hero-text p {
+    margin-bottom: 20px;
+}
+
+.hero-text:hover {
+    transform: scale(1.05);
+}
+
+.hero-text:hover.btn {
+    background: #0056b3;
+}
+
+.hero-text:hover.btn-primary {
+    background: #0056b3;
+}
+
+/* About Section */
+
+.about {
+    padding: 80px 20px;
+    background: #a3a2a279;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about.about-text {
+    margin-top: 20px;
+}
+
+.about.about-text p {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.about.about-image {
+    width: 100%;
+    margin-top: -2rem;
+}
+
+.about.about-text:hover {
+    background-color: #f4f4f4;
+    transform: scale(1.05);
+}
+
+.about.about-text:hover.btn {
+    background: #0056b3;
+}
+
+.about.about-text:hover.btn-primary {
+    background: #0056b3;
+}
+
+.boxit {
+    border: black;
+    border-radius: 3rem;
+    border-style: inset;
+    border-bottom: 2px solid #000 !important;
+    background-image: radial-gradient(ellipse, rgba(33, 53, 71, 0.50), rgb(33, 53, 71), rgba(0, 0, 0, 0.25)) !important;
+    transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
+    text-shadow: 1px 1px 1px black;
+}
+
+.cid-uC3QgnKlNK {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #ffffff;
+}
+.cid-uC3QgnKlNK .line {
+    background-color: #ff9966;
+    align: center;
+    height: 2px;
+    margin: 0 auto;
+}
+
+.cid-uC3PWf2Caa {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #ffffff;
+}
+.cid-uC3PWf2Caa ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 1.6rem;
+}
+.cid-uC3PWf2Caa li {
+    position: relative;
+    margin-bottom: 1rem;
+}
+.cid-uC3PWf2Caa ul li::before {
+    position: absolute;
+    left: -1.6rem;
+    content: "\2022";
+    color: #6592e6;
+    font-weight: bold;
+    font-size: 2rem;
+    width: 1.6rem;
+}
+
+.cid-uC1ozVzEPH,
+.cid-uC1oVBFmDk{
+    background-color: rgba(37, 38, 39, 0.61);
+    padding: 4rem;
+}
+
+.cid-uC1oX1nJNY {
+    border-radius: 0rem 0rem 5rem 5rem;
+    border-bottom: 2px solid #000 !important;
+    transition: transform 0.4s ease, box-shadow 0.3s ease !important;
+}
+
+/* Features Section */
+.features {
+    padding: 40px 20px;
+    background: #fff;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.features .feature {
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: left;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.features .feature h3 {
+    font-size: 1.5rem;
+    color: #007BFF;
+    margin-bottom: 10px;
+}
+
+.features .feature p {
+    color: #666;
+    font-size: 1rem;
+}

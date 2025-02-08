@@ -1,0 +1,468 @@
+/* General Styles */
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+  
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Use a Google font for a modern look */
+    margin: 0;
+    padding: 0;
+    display: block;
+    min-width: 320px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    line-height: 1.6;
+    /* color: #333; */
+    /* background-color: #f4f4f4; */
+}
+
+a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
+  }
+  a:hover {
+    color: #535bf2;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+  
+  button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    text-decoration-color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+  button:hover {
+    border-color: #646cff;
+  }
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+header {
+    background-color: #343a40; /* Dark background for header */
+    color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+}
+
+nav {
+    background: #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: sticky;
+    top: 0;
+    left: 0;
+    transform: translateY(-60px);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+nav a:hover {
+    background-color: #575757;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.mycontainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* General Navbar Styling */
+.navbar {
+    margin-top: 2rem;
+    background-color: #343a40;
+    border-bottom: 2px solid #007bff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: sticky;
+    z-index: 1000;
+}
+
+.navbarNav {
+    max-width: 100%;
+    border: #000000;
+    border-radius: 1rem;
+    border-style: groove;
+    transition: background-color 0.3s;
+}
+
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-brand img.logo-image {
+    max-height: 150px;
+}
+
+.navbar-brand span {
+    margin: 0%;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin: 0 10px;
+}
+
+.navbar-nav .nav-link {
+    color: #fff;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff;
+}
+
+.navbar-nav.social {
+    display: inline-flex;
+    justify-content: flex-end;
+}
+
+.navbar-nav.social .nav-link i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav.social .nav-link i:hover {
+    color: #007bff;
+}
+
+.navbar-nav.mx-auto {
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.navbar-toggler {
+    border-color: #ffffff; /* White border for toggler button */
+    visibility: hidden;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    background: #f4f4f4;
+    border-bottom: 2px solid #252627;
+    padding: 50px 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #333;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 15px 0 30px;
+}
+
+.hero .btn {
+    display: inline-block;
+    background: #007BFF;
+    color: #fff;
+    text-decoration-color: #1a1a1a;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.hero .btn:hover {
+    background: #0056b3;
+}
+
+.hero .btn-primary {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+}
+
+.hero .btn-secondary {
+    background: #6c757d;
+}  
+
+.hero .btn-secondary:hover {
+    background: #546980;
+}
+
+/* Features Section */
+.features {
+    padding: 40px 20px;
+    background: #fff;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.features .feature {
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: left;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.features .feature h3 {
+    font-size: 1.5rem;
+    color: #007BFF;
+    margin-bottom: 10px;
+}
+
+.features .feature p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Footer */
+footer {
+    background-color: #222;
+    color: #ddd;
+    padding: 40px 0;
+    font-size: 0.9rem;
+}
+
+footer h5 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+footer p {
+    margin-bottom: 10px;
+    color: #aaa;
+}
+
+footer .footer-links,
+footer .footer-social {
+    list-style: none;
+    padding: 0;
+}
+
+footer .footer-links li,
+footer .footer-social li {
+    display: inline;
+    margin-right: 10px;
+}
+
+footer .footer-links a,
+footer .footer-social a {
+    color: #ddd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .footer-links a:hover,
+footer .footer-social a:hover {
+    color: #007bff;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    a:hover {
+      color: #02530f;
+    }
+    button {
+      background-color: #f9f9f9;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+      color: #f9f9f9;
+      background-color: #213547;
+    }
+    a:hover {
+      color: #01ff73;
+    }
+    button {
+      background-color: #000000;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-nav .nav-item {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .navbar-nav.social {
+        justify-content: center;
+    }
+    .navbar-nav.mx-auto {
+        display: none;
+    }
+
+    footer .text-center {
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    header nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header nav a {
+        display: block;
+        text-align: center;
+        padding: 15px;
+    }
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+    .navbar-nav.social {
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    header nav a {
+        padding: 10px;
+    }
+    .navbar-toggler {
+        visibility: visible;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .features .feature {
+        margin-bottom: 20px;
+    }
+
+    .product-card img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    header nav a {
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    header nav a {
+        padding: 5px;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    header nav a {
+        padding: 3px;
+    }
+}
+
+@media screen and (max-width: 240px) {
+    header nav a {
+        padding: 2px;
+    }
+}
+
+@media screen and (max-width: 200px) {
+    header nav a {
+        padding: 1px;
+    }
+}
+
+@media screen and (max-width: 160px) {  
+    header nav a {
+        padding: 0;
+    }
+}

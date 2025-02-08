@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}SwagPopUps{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}SwagPopUps, online shopping, popups, retail{% endblock %}">
+    <meta name="author" content="{% block author %}SwagPopUps{% endblock %}">
+    <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% block ogtitle %}SwagPopUps{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{% block ogdescription %}SwagPopUps{% endblock %}">
+    <meta property="og:url" content="{{ url_for('home') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+    <meta property="og:site_name" content="SwagPopUps">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="SwagPopUps">
+    <meta property="og:image:secure_url" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SwagPopUps">
+    <meta name="twitter:title" content="{% block twittertitle %}SwagPopUps{% endblock %}">
+    <meta name="twitter:description" content="{% block twitterdescription %}SwagPopUps{% endblock %}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='image/og-image.jpg') }}">
+    <meta name="twitter:creator" content="@SwagPopUps">
+    <meta name="twitter:image:alt" content="SwagPopUps">
+    <meta name="twitter:image:secure_url" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+    <meta name="twitter:image:width" content="1200">
+    <meta name="twitter:image:height" content="627">
+    <meta name="twitter:image:type" content="image/jpeg">
+
+    <!-- Page Title -->
+    <title>{% block title %}SwagPopUps{% endblock %}</title>
+
+    <!-- Icons-->
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+  
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" integrity="sha384-HEiFpbe7BAmT9Rprl8Mvo10xyxAH+SNeBQ7ljb2RDBRB9uvmyowdEdGe0RIEmJ2E" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block additionalcss %}{% endblock %}
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-3J3Z4l0lJ3j5Jv6v6v4ZGJ" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-QYfdyHIIBlfL71Zx9hbROZ9V3H2nPAdsmXOvfn6iUCjEm7gh1eNpTtYr7hYH1KtW" crossorigin="anonymous" defer></script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+ 
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry-layout/4.3.0/masonry.pkgd.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    {% block headscripts %}{% endblock %}
+
+    <!-- Styles -->
+    {% block headstyles %}{% endblock %}
+
+</head>
+    
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="mycontainer">
+    
+            <!-- Navbar Toggler (ONLY Visible on Mobile) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <!-- Navbar Links (Visible on Large Screens) -->
+            <div class="collapse navbar-collapse navbarNav row" id="navbarNav">
+                <!-- Navbar Brand -->
+                <div class="navbar-brand col-6 .col-md-4">
+                    <a class="navbar-logo" href="/">
+                        <img class="logo-image" src="{{ url_for('static', filename='images/swagpopups_transparent.png') }}" alt="LOGO">
+                        <span>PopUp Shops</span>
+                    </a>
+                </div>
+                <!-- Navigation (Visible on Large Screens) -->
+                <div class="mx-auto col-6 .col-md-4">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        {% if session.get('user_id') %}
+                            {% if session.get('is_vendor') %}
+                                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                            {% else %}
+                                <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                            {% endif %}
+                            <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- Social Links (Visible on Large Screens) -->
+                <div class="social col-6 .col-md-4">
+                    <ul class="navbar-nav social-links">
+                        <li class="nav-item"><a class="nav-link" href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://twitter.com" target="_blank"><i class="bi bi-twitter"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i></a></li>
+                    </ul>
+                </div
+            </div>
+        </div>
+    </nav>    
+       
+    {% block mainbanner %}{% endblock %}
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    <main>
+        {% block promocontent %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block maincontent %}{% endblock %}
+        {% block subcontent %}{% endblock %}
+    </main>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- About -->
+                <div class="col-md-4 text-center text-md-start">
+                    <h5>About SwagPopUps</h5>
+                    <p>Bringing you the best pop-up shopping experience. Exclusive deals, latest trends, and more!</p>
+                </div>
+    
+                <!-- Quick Links -->
+                <div class="col-md-4 text-center">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Social Media -->
+                <div class="col-md-4 text-center text-md-end">
+                    <h5>Follow Us</h5>
+                    <ul class="footer-social">
+                        <li><a href="https://twitter.com/swagpopups" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://facebook.com/swagpopups" target="_blank"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="https://instagram.com/swagpopups" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <!-- Bottom Section -->
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 SwagPopUps. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-B0R+wG5n6M/0lO+PUv4y+rF6l7Q8i9j6JZQ5r9CjwJIBI70xJPU+R3/1dWqM9f5h" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@4.6.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    {% block additionalscripts %}{% endblock %}
+    {% block footscripts %}{% endblock %}
+</body>
+</html>
+

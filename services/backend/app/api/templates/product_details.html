@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}'s Details{% endblock %}
+
+{% block navmarker %}<a href="#">{{ product.name }}'s Details</a>{% endblock %}
+
+{% block maincontent %}
+    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+    <p>{{ product.description }}</p>
+    <p>Price: ${{ product.price }}</p>
+    <button>Add to Cart</button>
+{% endblock %}
+
+{% block subcontent %}
+    <h2>Related Products</h2>
+    <ul>
+        {% for related_product in related_products %}
+        <li>
+            <a href="/product/{{ related_product.id }}">{{ related_product.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

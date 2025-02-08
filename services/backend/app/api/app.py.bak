@@ -1,0 +1,868 @@
+# backend/app.py
+from flask import Flask, flash, render_template, request, redirect, url_for, session, jsonify, make_response, send_file
+from flask_restful import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from wtforms import StringField, PasswordField, SelectField, HiddenField, DateField, SubmitField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
+from sqlalchemy.exc import IntegrityError
+from flask_wtf.csrf import CSRFProtect
+from flask_wtf import FlaskForm
+from flask_bcrypt import Bcrypt
+from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+import datetime
+import logging
+import os
+
+app = Flask(__name__)
+api= Api(app)
+CORS(app)
+csrf = CSRFProtect(app)
+
+# For production, load your SECRET_KEY from env/config
+app.config['SECRET_KEY'] = 'your_secret_key_here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///membership.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.StreamHandler()
+                    ])
+logger = logging.getLogger(__name__)
+
+# ------------------------
+# 3. Define the available country codes
+#    (You can add as many as you like or pull from an external source)
+# ------------------------
+
+SUBMEMBERSHIP_TYPES = {
+    'customer': ['basic', 'premium'],
+    'vendor': ['starter', 'enterprise']
+}
+
+# ---------------------------------------------------------------------
+# Database Model
+# ---------------------------------------------------------------------
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+# Initialize the database
+db = SQLAlchemy()
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+    # Relationship to User_Profile
+    profile = db.relationship('UserProfile', back_populates='user', uselist=False)
+    
+    # Relationship to User_Membership
+    membership = db.relationship('UserMembership', back_populates='user_profile', uselist=False)
+
+class UserProfile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String(200), nullable=True)  # Assuming the image will be stored as a URL or path
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    phone_country_code = db.Column(db.String(5), nullable=False)
+    phone_area_code = db.Column(db.String(5), nullable=False)
+    phone_number = db.Column(db.String(15), nullable=False)
+    street_address = db.Column(db.String(200), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
+    zip_code = db.Column(db.String(10), nullable=False)
+    birthdate = db.Column(db.Date, nullable=False)
+
+    # Foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    # Relationship to User
+    user = db.relationship('User', back_populates='profile')
+
+    # Relationship to User_Membership
+    membership = db.relationship('UserMembership', back_populates='user_profile', uselist=False)
+
+class UserMembership(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    membership_type = db.Column(db.String(20), nullable=False)
+    submembership_type = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Foreign key to User_Profile
+    user_profile_id = db.Column(db.Integer, db.ForeignKey('user_profile.id'), nullable=False)
+    
+    # Relationship to User_Profile
+    user_profile = db.relationship('UserProfile', back_populates='membership')
+
+
+# ----------------------------------------------------------------
+# Form for registration
+# ----------------------------------------------------------------
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SelectField, SubmitField, DateField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
+from datetime import datetime
+
+# Assuming COUNTRY_CODES is defined as a list of country code tuples somewhere in your app
+COUNTRY_CODES = [
+    ('+1', 'United States (+1)'),
+    ('+93', 'Afghanistan (+93)'),
+    ('+355', 'Albania (+355)'),
+    ('+213', 'Algeria (+213)'),
+    ('+1-684', 'American Samoa (+1-684)'),
+    ('+376', 'Andorra (+376)'),
+    ('+244', 'Angola (+244)'),
+    ('+1-264', 'Anguilla (+1-264)'),
+    ('+672', 'Antarctica (+672)'),
+    ('+1-268', 'Antigua and Barbuda (+1-268)'),
+    ('+54', 'Argentina (+54)'),
+    ('+374', 'Armenia (+374)'),
+    ('+297', 'Aruba (+297)'),
+    ('+61', 'Australia (+61)'),
+    ('+43', 'Austria (+43)'),
+    ('+994', 'Azerbaijan (+994)'),
+    ('+1-242', 'Bahamas (+1-242)'),
+    ('+973', 'Bahrain (+973)'),
+    ('+880', 'Bangladesh (+880)'),
+    ('+1-246', 'Barbados (+1-246)'),
+    ('+375', 'Belarus (+375)'),
+    ('+32', 'Belgium (+32)'),
+    ('+501', 'Belize (+501)'),
+    ('+229', 'Benin (+229)'),
+    ('+1-441', 'Bermuda (+1-441)'),
+    ('+975', 'Bhutan (+975)'),
+    ('+591', 'Bolivia (+591)'),
+    ('+387', 'Bosnia and Herzegovina (+387)'),
+    ('+267', 'Botswana (+267)'),
+    ('+55', 'Brazil (+55)'),
+    ('+246', 'British Indian Ocean Territory (+246)'),
+    ('+1-284', 'British Virgin Islands (+1-284)'),
+    ('+673', 'Brunei (+673)'),
+    ('+359', 'Bulgaria (+359)'),
+    ('+226', 'Burkina Faso (+226)'),
+    ('+257', 'Burundi (+257)'),
+    ('+855', 'Cambodia (+855)'),
+    ('+237', 'Cameroon (+237)'),
+    ('+1', 'Canada (+1)'),
+    ('+238', 'Cape Verde (+238)'),
+    ('+1-345', 'Cayman Islands (+1-345)'),
+    ('+236', 'Central African Republic (+236)'),
+    ('+235', 'Chad (+235)'),
+    ('+56', 'Chile (+56)'),
+    ('+86', 'China (+86)'),
+    ('+61', 'Christmas Island (+61)'),
+    ('+61', 'Cocos (Keeling) Islands (+61)'),
+    ('+57', 'Colombia (+57)'),
+    ('+269', 'Comoros (+269)'),
+    ('+682', 'Cook Islands (+682)'),
+    ('+506', 'Costa Rica (+506)'),
+    ('+385', 'Croatia (+385)'),
+    ('+53', 'Cuba (+53)'),
+    ('+599', 'Curaçao (+599)'),
+    ('+357', 'Cyprus (+357)'),
+    ('+420', 'Czech Republic (+420)'),
+    ('+243', 'Democratic Republic of the Congo (+243)'),
+    ('+45', 'Denmark (+45)'),
+    ('+253', 'Djibouti (+253)'),
+    ('+1-767', 'Dominica (+1-767)'),
+    ('+1-809', 'Dominican Republic (+1-809)'),
+    ('+593', 'Ecuador (+593)'),
+    ('+20', 'Egypt (+20)'),
+    ('+503', 'El Salvador (+503)'),
+    ('+240', 'Equatorial Guinea (+240)'),
+    ('+291', 'Eritrea (+291)'),
+    ('+372', 'Estonia (+372)'),
+    ('+251', 'Ethiopia (+251)'),
+    ('+500', 'Falkland Islands (+500)'),
+    ('+298', 'Faroe Islands (+298)'),
+    ('+679', 'Fiji (+679)'),
+    ('+358', 'Finland (+358)'),
+    ('+33', 'France (+33)'),
+    ('+689', 'French Polynesia (+689)'),
+    ('+241', 'Gabon (+241)'),
+    ('+220', 'Gambia (+220)'),
+    ('+995', 'Georgia (+995)'),
+    ('+49', 'Germany (+49)'),
+    ('+233', 'Ghana (+233)'),
+    ('+350', 'Gibraltar (+350)'),
+    ('+30', 'Greece (+30)'),
+    ('+299', 'Greenland (+299)'),
+    ('+1-473', 'Grenada (+1-473)'),
+    ('+1-671', 'Guam (+1-671)'),
+    ('+502', 'Guatemala (+502)'),
+    ('+44-1481', 'Guernsey (+44-1481)'),
+    ('+224', 'Guinea (+224)'),
+    ('+245', 'Guinea-Bissau (+245)'),
+    ('+592', 'Guyana (+592)'),
+    ('+509', 'Haiti (+509)'),
+    ('+504', 'Honduras (+504)'),
+    ('+852', 'Hong Kong (+852)'),
+    ('+36', 'Hungary (+36)'),
+    ('+354', 'Iceland (+354)'),
+    ('+91', 'India (+91)'),
+    ('+62', 'Indonesia (+62)'),
+    ('+98', 'Iran (+98)'),
+    ('+964', 'Iraq (+964)'),
+    ('+353', 'Ireland (+353)'),
+    ('+44-1624', 'Isle of Man (+44-1624)'),
+    ('+972', 'Israel (+972)'),
+    ('+39', 'Italy (+39)'),
+    ('+225', 'Ivory Coast (+225)'),
+    ('+1-876', 'Jamaica (+1-876)'),
+    ('+81', 'Japan (+81)'),
+    ('+44-1534', 'Jersey (+44-1534)'),
+    ('+962', 'Jordan (+962)'),
+    ('+7', 'Kazakhstan (+7)'),
+    ('+254', 'Kenya (+254)'),
+    ('+686', 'Kiribati (+686)'),
+    ('+383', 'Kosovo (+383)'),
+    ('+965', 'Kuwait (+965)'),
+    ('+996', 'Kyrgyzstan (+996)'),
+    ('+856', 'Laos (+856)'),
+    ('+371', 'Latvia (+371)'),
+    ('+961', 'Lebanon (+961)'),
+    ('+266', 'Lesotho (+266)'),
+    ('+231', 'Liberia (+231)'),
+    ('+218', 'Libya (+218)'),
+    ('+423', 'Liechtenstein (+423)'),
+    ('+370', 'Lithuania (+370)'),
+    ('+352', 'Luxembourg (+352)'),
+    ('+853', 'Macau (+853)'),
+    ('+389', 'Macedonia (+389)'),
+    ('+261', 'Madagascar (+261)'),
+    ('+265', 'Malawi (+265)'),
+    ('+60', 'Malaysia (+60)'),
+    ('+960', 'Maldives (+960)'),
+    ('+223', 'Mali (+223)'),
+    ('+356', 'Malta (+356)'),
+    ('+692', 'Marshall Islands (+692)'),
+    ('+222', 'Mauritania (+222)'),
+    ('+230', 'Mauritius (+230)'),
+    ('+262', 'Mayotte (+262)'),
+    ('+52', 'Mexico (+52)'),
+    ('+691', 'Micronesia (+691)'),
+    ('+373', 'Moldova (+373)'),
+    ('+377', 'Monaco (+377)'),
+    ('+976', 'Mongolia (+976)'),
+    ('+382', 'Montenegro (+382)'),
+    ('+1-664', 'Montserrat (+1-664)'),
+    ('+212', 'Morocco (+212)'),
+    ('+258', 'Mozambique (+258)'),
+    ('+95', 'Myanmar (+95)'),
+    ('+264', 'Namibia (+264)'),
+    ('+674', 'Nauru (+674)'),
+    ('+977', 'Nepal (+977)'),
+    ('+31', 'Netherlands (+31)'),
+    ('+599', 'Netherlands Antilles (+599)'),
+    ('+687', 'New Caledonia (+687)'),
+    ('+64', 'New Zealand (+64)'),
+    ('+505', 'Nicaragua (+505)'),
+    ('+227', 'Niger (+227)'),
+    ('+234', 'Nigeria (+234)'),
+    ('+683', 'Niue (+683)'),
+    ('+850', 'North Korea (+850)'),
+    ('+1-670', 'Northern Mariana Islands (+1-670)'),
+    ('+47', 'Norway (+47)'),
+    ('+968', 'Oman (+968)'),
+    ('+92', 'Pakistan (+92)'),
+    ('+680', 'Palau (+680)'),
+    ('+970', 'Palestine (+970)'),
+    ('+507', 'Panama (+507)'),
+    ('+675', 'Papua New Guinea (+675)'),
+    ('+595', 'Paraguay (+595)'),
+    ('+51', 'Peru (+51)'),
+    ('+63', 'Philippines (+63)'),
+    ('+64', 'Pitcairn (+64)'),
+    ('+48', 'Poland (+48)'),
+    ('+351', 'Portugal (+351)'),
+    ('+1-787', 'Puerto Rico (+1-787)'),
+    ('+974', 'Qatar (+974)'),
+    ('+242', 'Republic of the Congo (+242)'),
+    ('+262', 'Reunion (+262)'),
+    ('+40', 'Romania (+40)'),
+    ('+7', 'Russia (+7)'),
+    ('+250', 'Rwanda (+250)'),
+    ('+590', 'Saint Barthelemy (+590)'),
+    ('+290', 'Saint Helena (+290)'),
+    ('+1-869', 'Saint Kitts and Nevis (+1-869)'),
+    ('+1-758', 'Saint Lucia (+1-758)'),
+    ('+590', 'Saint Martin (+590)'),
+    ('+508', 'Saint Pierre and Miquelon (+508)'),
+    ('+1-784', 'Saint Vincent and the Grenadines (+1-784)'),
+    ('+685', 'Samoa (+685)'),
+    ('+378', 'San Marino (+378)'),
+    ('+239', 'Sao Tome and Principe (+239)'),
+    ('+966', 'Saudi Arabia (+966)'),
+    ('+221', 'Senegal (+221)'),
+    ('+381', 'Serbia (+381)'),
+    ('+248', 'Seychelles (+248)'),
+    ('+232', 'Sierra Leone (+232)'),
+    ('+65', 'Singapore (+65)'),
+    ('+1-721', 'Sint Maarten (+1-721)'),
+    ('+421', 'Slovakia (+421)'),
+    ('+386', 'Slovenia (+386)'),
+    ('+677', 'Solomon Islands (+677)'),
+    ('+252', 'Somalia (+252)'),
+    ('+27', 'South Africa (+27)'),
+    ('+82', 'South Korea (+82)'),
+    ('+211', 'South Sudan (+211)'),
+    ('+34', 'Spain (+34)'),
+    ('+94', 'Sri Lanka (+94)'),
+    ('+249', 'Sudan (+249)'),
+    ('+597', 'Suriname (+597)'),
+    ('+47', 'Svalbard and Jan Mayen (+47)'),
+    ('+268', 'Swaziland (Eswatini) (+268)'),
+    ('+46', 'Sweden (+46)'),
+    ('+41', 'Switzerland (+41)'),
+    ('+963', 'Syria (+963)'),
+    ('+886', 'Taiwan (+886)'),
+    ('+992', 'Tajikistan (+992)'),
+    ('+255', 'Tanzania (+255)'),
+    ('+66', 'Thailand (+66)'),
+    ('+670', 'Timor-Leste (+670)'),
+    ('+228', 'Togo (+228)'),
+    ('+690', 'Tokelau (+690)'),
+    ('+676', 'Tonga (+676)'),
+    ('+1-868', 'Trinidad and Tobago (+1-868)'),
+    ('+216', 'Tunisia (+216)'),
+    ('+90', 'Turkey (+90)'),
+    ('+993', 'Turkmenistan (+993)'),
+    ('+1-649', 'Turks and Caicos Islands (+1-649)'),
+    ('+688', 'Tuvalu (+688)'),
+    ('+1-340', 'U.S. Virgin Islands (+1-340)'),
+    ('+256', 'Uganda (+256)'),
+    ('+380', 'Ukraine (+380)'),
+    ('+971', 'United Arab Emirates (+971)'),
+    ('+44', 'United Kingdom (+44)'),
+    ('+598', 'Uruguay (+598)'),
+    ('+998', 'Uzbekistan (+998)'),
+    ('+678', 'Vanuatu (+678)'),
+    ('+379', 'Vatican City (+379)'),
+    ('+58', 'Venezuela (+58)'),
+    ('+84', 'Vietnam (+84)'),
+    ('+681', 'Wallis and Futuna (+681)'),
+    ('+212', 'Western Sahara (+212)'),
+    ('+967', 'Yemen (+967)'),
+    ('+260', 'Zambia (+260)'),
+    ('+263', 'Zimbabwe (+263)')
+]
+
+class RegistrationForm(FlaskForm):
+    # User-related fields
+    username = StringField(
+        'Username',
+        validators=[DataRequired(), Length(min=4, max=80, message='Username must be between 4 and 80 characters.')]
+    )
+    email = StringField(
+        'Email',
+        validators=[DataRequired(), Email(check_deliverability=True, message='Invalid or undeliverable email address.')]
+    )
+    password = PasswordField(
+        'Password',
+        validators=[DataRequired(), Length(min=6, message='Password must be at least 6 characters long.')]
+    )
+    confirm_password = PasswordField(
+        'Confirm Password',
+        validators=[DataRequired(), EqualTo('password', message='Passwords must match.')]
+    )
+
+    # User Profile-related fields
+    first_name = StringField(
+        'First Name',
+        validators=[DataRequired(), Length(min=1, max=50)]
+    )
+    last_name = StringField(
+        'Last Name',
+        validators=[DataRequired(), Length(min=1, max=50)]
+    )
+    phone_country_code = SelectField(
+        'Country Code',
+        choices=COUNTRY_CODES,
+        validators=[DataRequired()]
+    )
+    phone_area_code = StringField(
+        'Area Code',
+        validators=[DataRequired(), Regexp(r'^\d{1,5}$', message='Enter a valid area code (1-5 digits).')]
+    )
+    phone_number = StringField(
+        'Phone Number',
+        validators=[DataRequired(), Regexp(r'^\d{3,15}$', message='Enter a valid phone number (3-15 digits).')]
+    )
+    street_address = StringField(
+        'Street Address',
+        validators=[DataRequired(), Length(max=200)]
+    )
+    city = StringField(
+        'City',
+        validators=[DataRequired(), Length(max=100)]
+    )
+    state = StringField(
+        'State',
+        validators=[DataRequired(), Length(max=100)]
+    )
+    zip_code = StringField(
+        'Zip Code',
+        validators=[DataRequired(), Length(max=10)]
+    )
+    birthdate = DateField(
+        'Birthdate',
+        validators=[DataRequired()],
+        format='%Y-%m-%d'
+    )
+
+    # User Membership-related fields
+    membership_type = SelectField(
+        'Membership Type',
+        choices=[('customer', 'Customer'), ('vendor', 'Vendor')],
+        validators=[DataRequired()]
+    )
+    submembership_type = SelectField(
+        'Subscription Level',
+        choices=[],
+        validators=[DataRequired()]
+    )
+
+    submit = SubmitField('Register')
+
+
+# ---------------------------------------------------------------------
+# Routes
+# ---------------------------------------------------------------------
+# Optional: Log all responses for debugging
+@app.after_request
+def after_request(response):
+    logger.debug(f"Response status: {response.status} | URL: {request.path} | IP: {request.remote_addr}")
+    return response
+
+@app.route('/')
+def home():
+    user_ip = request.remote_addr  # Get the client's IP address
+    user_agent = request.headers.get('User-Agent')  # Get user agent for debugging
+    logger.info(f"Home page accessed from {user_ip} | User-Agent: {user_agent}")
+
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        logger.error(f"Error rendering home page: {str(e)}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+    
+@app.route('/<int:num>', methods=['GET'])
+def home_with_num(num):
+    logger.info(f"Home page accessed with parameter {num}")
+    return jsonify({'data': num**2})
+
+@app.route('/<int:userid>', methods=['GET'])
+def get_user_by_id(userid):
+    logger.info(f"Getting user by ID {userid}")
+    user = User.query.get_or_404(userid)
+    return jsonify({'username': user.username, 'email': user.email})
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            # Create User object for authentication-related fields
+            new_user = User(
+                username=form.username.data,
+                email=form.email.data,
+                password=generate_password_hash(form.password.data)
+            )
+
+            # Create UserProfile object and link it to the User
+            new_user_profile = UserProfile(
+                user=new_user,  # Linking this profile to the User
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                phone_country_code=form.phone_country_code.data,
+                phone_area_code=form.phone_area_code.data,
+                phone_number=form.phone_number.data,
+                street_address=form.street_address.data,
+                city=form.city.data,
+                state=form.state.data,
+                zip_code=form.zip_code.data,
+                birthdate=form.birthdate.data
+            )
+
+            # Create UserMembership object and link it to the UserProfile
+            new_user_membership = UserMembership(
+                user_profile=new_user_profile,  # Linking this membership to the UserProfile
+                membership_type=form.membership_type.data,
+                submembership_type=form.submembership_type.data,
+                created_at=datetime.utcnow()
+            )
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                flash("Registration successful! Please log in.", "success")
+                return redirect(url_for('login'))
+            except IntegrityError:
+                db.session.rollback()
+                flash("Username or email already exists.", "danger")
+            return redirect(url_for('register'))  # fresh blank form on next GET
+        # If errors, show same form with data
+        return render_template('register.html', form=form)
+    else:
+        # It's a GET request: brand new blank form
+        form = RegistrationForm()
+        return render_template('register.html', form=form)    
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        # Check if the user is in the mock database
+        if email in mock_users:
+            session['user_id'] = email
+            session['is_vendor'] = mock_users[email]['is_vendor']
+            logger.info(f"Mock user logged in: {email} ({'Vendor' if mock_users[email]['is_vendor'] else 'Customer'})")
+            return redirect(url_for('dashboard'))
+
+        # Check if the user exists in the actual database
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            session['is_vendor'] = user.is_vendor
+            logger.info(f"User logged in: {user.username} ({'Vendor' if user.is_vendor else 'Customer'})")
+            return redirect(url_for('dashboard'))
+
+        # If neither mock nor real user is valid, return an error
+        logger.warning(f"Failed login attempt for email: {email}")
+        return "Invalid credentials", 401
+
+    # Render the login page for GET requests
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('is_vendor', None)
+    return redirect(url_for('login'))
+
+@app.route('/pdf_report', methods=['POST'])
+def generate_pdf_report():
+    if 'user_id' not in session:
+        logger.warning("Unauthorized access attempt to generate PDF report.")
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    logger.info(f"Generating PDF report for user: {user.username} ({'Vendor' if user.is_vendor else 'Customer'})")
+    # Generate PDF report with reportlab
+    doc = SimpleDocTemplate("membership_report.pdf", pagesize=letter)
+    styles = getSampleStyleSheet()
+    story = []
+    story.append(Paragraph("Membership Report", styles['h1']))
+    story.append(Paragraph(f"User: {user.username}", styles['h2']))
+    story.append(Paragraph(f"Membership Type: {user.membership_type}", styles['h3']))
+    story.append(Paragraph(f"Subscription Level: {user.submembership_type}", styles['h3']))
+    doc.build(story)
+    return send_file("membership_report.pdf", as_attachment=True)
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        logger.warning("Unauthorized access attempt to dashboard.")
+        return redirect(url_for('login'))
+
+    if session.get('is_vendor'):
+        logger.debug(f"Vendor dashboard accessed. Vendor ID: {session['user_id']}")
+        return render_template('vendor_dashboard.html')
+    else:
+        logger.debug("Customer dashboard accessed.")
+        return render_template('customer_dashboard.html')
+
+# ---------------------------------------------------------------------
+# API Routes
+# ---------------------------------------------------------------------
+# making a class for a particular resource 
+# the get, post methods correspond to get and post requests 
+# they are automatically mapped by flask_restful. 
+# other methods include put, delete, etc. 
+class Hello(Resource): 
+  
+    # corresponds to the GET request. 
+    # this function is called whenever there 
+    # is a GET request for this resource 
+    def get(self): 
+  
+        return jsonify({'message': 'hello world'}) 
+  
+    # Corresponds to POST request 
+    def post(self): 
+          
+        data = request.get_json()     # status code 
+        return jsonify({'data': data}), 201
+
+# another resource to calculate the square of a number 
+class Square(Resource): 
+  
+    def get(self, num): 
+  
+        return jsonify({'square': num**2})
+    
+class apiLogin(Resource):
+    def get(self):
+        return jsonify({'message': 'API endpoint for login'})
+    
+    def post(self):
+        # Check if the request is JSON
+        if request.is_json:
+            data = request.get_json()  # Get JSON data
+            email = data.get('email')
+            password = data.get('password')
+        else:
+            # If not JSON, fetch from URL parameters
+            email = request.args.get('email')  # Get email from URL parameters
+            password = request.args.get('password')  # Get password from URL parameters
+
+        if not email or not password:
+            return jsonify({'message': 'Email and password are required'}), 400
+
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+
+        if check_password_hash(user.password, password):
+            # Create a JWT token
+            token = jwt.encode(
+                {
+                    'user_id': user.id,
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
+                },
+                app.config['SECRET_KEY'],
+                algorithm='HS256'
+            )
+            return jsonify({
+                'token': token,
+                'username': user.username,
+                'membership_type': user.membership_type
+            })
+        else:
+            return jsonify({'message': 'Wrong password'}), 401
+    
+class getSubmembershipTypes(Resource):
+
+    def get(self, membership_type):
+        return jsonify(SUBMEMBERSHIP_TYPES.get(membership_type, []))
+
+class apiRegister(Resource):
+    def post(self):
+            data = request.get_json()
+            required_fields = ['username', 'email', 'password', 'first_name', 'last_name', 'phone_country_code',
+                            'phone_area_code', 'phone_number', 'street_address', 'city', 'state', 'zip_code', 'birthdate',
+                            'membership_type', 'submembership_type']
+            
+            if not all(field in data for field in required_fields):
+                return jsonify({'error': 'Missing required fields'}), 400
+            
+            existing_user = User.query.filter((User.username == data['username']) | (User.email == data['email'])).first()
+            if existing_user:
+                return jsonify({'error': 'User with this username or email already exists'}), 400
+            
+            try:
+                hashed_pw = generate_password_hash(data['password'])
+                new_user = User(
+                    username=data['username'],
+                    email=data['email'],
+                    password=hashed_pw,
+                    first_name=data['first_name'],
+                    last_name=data['last_name'],
+                    phone_country_code=data['phone_country_code'],
+                    phone_area_code=data['phone_area_code'],
+                    phone_number=data['phone_number'],
+                    street_address=data['street_address'],
+                    city=data['city'],
+                    state=data['state'],
+                    zip_code=data['zip_code'],
+                    birthdate=data['birthdate'],
+                    membership_type=data['membership_type'],
+                    submembership_type=data['submembership_type']
+                )
+                db.session.add(new_user)
+                db.session.commit()
+                return jsonify({'message': 'User registered successfully'}), 201
+            except IntegrityError:
+                db.session.rollback()
+                return jsonify({'error': 'Database error. Please try again'}), 500
+
+# adding the defined resources along with their corresponding urls 
+api.add_resource(Hello, '/api') 
+api.add_resource(Square, '/api/square/<int:num>')
+api.add_resource(apiLogin, '/api/login')
+api.add_resource(apiRegister, '/api/register')
+api.add_resource(getSubmembershipTypes, '/api/submembership_types/<string:membership_type>')
+
+#@app.route('/api/login', methods=['POST'])
+#def api_login():
+#    data = request.json
+#    email = data.get('email')
+#    password = data.get('password')
+#
+#    user = User.query.filter_by(email=email).first()
+#    if not user:
+#        return jsonify({'message': 'User not found'}), 404 
+#    
+#    if check_password_hash(user.password, password):
+#    # Create a JWT token
+#        token = jwt.encode(
+#            {
+#                'user_id': user.id,
+#                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
+#            },
+#            app.config['SECRET_KEY'],
+#            algorithm='HS256'
+#        )
+#        return jsonify({
+#            'token': token,
+#            'username': user.username,
+#            'membership_type': user.membership_type
+#        })
+#    else:
+#        return jsonify({'message': 'Wrong password'}), 401
+    
+# API route to fetch submembership types dynamically@app.route('/api/submembership_types/<membership_type>')
+# @app.route('/api/submembership_types/<membership_type>') 
+# def get_submembership_types(membership_type):
+#     return jsonify(SUBMEMBERSHIP_TYPES.get(membership_type, []))
+
+# @app.route('/api/register', methods=['POST'])
+# def api_register():
+#     data = request.get_json()
+#     required_fields = ['username', 'email', 'password', 'first_name', 'last_name', 'phone_country_code',
+#                        'phone_area_code', 'phone_number', 'street_address', 'city', 'state', 'zip_code', 'birthdate',
+#                        'membership_type', 'submembership_type']
+    
+#     if not all(field in data for field in required_fields):
+#         return jsonify({'error': 'Missing required fields'}), 400
+    
+#     existing_user = User.query.filter((User.username == data['username']) | (User.email == data['email'])).first()
+#     if existing_user:
+#         return jsonify({'error': 'User with this username or email already exists'}), 400
+    
+#     try:
+#         hashed_pw = generate_password_hash(data['password'])
+#         new_user = User(
+#             username=data['username'],
+#             email=data['email'],
+#             password=hashed_pw,
+#             first_name=data['first_name'],
+#             last_name=data['last_name'],
+#             phone_country_code=data['phone_country_code'],
+#             phone_area_code=data['phone_area_code'],
+#             phone_number=data['phone_number'],
+#             street_address=data['street_address'],
+#             city=data['city'],
+#             state=data['state'],
+#             zip_code=data['zip_code'],
+#             birthdate=data['birthdate'],
+#             membership_type=data['membership_type'],
+#             submembership_type=data['submembership_type']
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
+#         return jsonify({'message': 'User registered successfully'}), 201
+#     except IntegrityError:
+#         db.session.rollback()
+#         return jsonify({'error': 'Database error. Please try again'}), 500
+
+@app.route('/api/membership', methods=['GET'])
+def membership_info():
+    """
+    Protected route; requires a valid JWT in Authorization header.
+    e.g. Authorization: Bearer <token>
+    """
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'message': 'Token missing'}), 403
+
+    # Typically "Bearer <token>", so split on space
+    try:
+        token_type, token_value = auth_header.split()
+        if token_type.lower() != 'bearer':
+            return jsonify({'message': 'Invalid token type'}), 403
+    except ValueError:
+        # In case there's no space
+        return jsonify({'message': 'Invalid Authorization header format'}), 403
+
+    try:
+        decoded = jwt.decode(token_value, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user_id = decoded['user_id']
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        return jsonify({'message': 'Token is invalid or expired'}), 401
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    return jsonify({
+        'username': user.username,
+        'email': user.email,
+        'membership_type': user.membership_type,
+        'created_at': user.created_at
+    })
+
+# API route to update user's subscription level
+@app.route('/api/update_subscription', methods=['POST'])
+def update_subscription():
+    if 'user_id' not in session:
+        logger.warning("Unauthorized access attempt to update subscription level.")
+        return jsonify({'error': 'Unauthorized'}), 401
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    data = request.get_json()
+    new_submembership_type = data.get('submembership_type')
+    if new_submembership_type not in SUBMEMBERSHIP_TYPES[user.membership_type]:
+        return jsonify({'error': 'Invalid subscription level'}), 400
+    user.submembership_type = new_submembership_type
+    db.session.commit()
+    return jsonify({'success': 'Subscription level updated successfully'})
+
+# API route to fetch user's subscription level
+@app.route('/api/subscription_level')
+def get_subscription_level():
+    if 'user_id' not in session:
+        logger.warning("Unauthorized access attempt to fetch subscription level.")
+        return jsonify({'error': 'Unauthorized'}), 401
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    return jsonify({'submembership_type': user.submembership_type})
+
+
+# Error handling middleware
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({'error': 'Page not found'}), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({'error': 'Internal server error'}), 500
+
+# ---------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # create tables if not present
+        logger.info("Database tables created.")
+        logger.info("Membership App Backend started.")
+        # Mock user data for testing purposes
+        mock_users = {
+            "vendor@example.com": {"username": "VendorUser", "is_vendor": True},
+            "customer@example.com": {"username": "CustomerUser", "is_vendor": False}
+        }            
+    app.run(debug=True)
+

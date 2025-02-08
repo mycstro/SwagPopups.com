@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.name }}'s Profile{% endblock %}
+
+{% block navmarker %}<a href="#">{{ customer.name }}'s Profile</a>{% endblock %}
+
+{% block maincontent %}
+    <section>
+        <h2>Thank you for your purchase!</h2>
+        <p>Order ID: {{ order.id }}</p>
+        <p>Order Date: {{ order.date }}</p>
+        <p>Total: ${{ order.total }}</p>
+    </section>
+    <section>
+        <h3>Items in your order:</h3>
+        <ul>
+            {% for item in order.items %}
+            <li>{{ item.product.name }} (x{{ item.quantity }}) - ${{ item.total }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section>
+        <a href="/">Continue Shopping</a>
+    </section>
+{% endblock %}
+

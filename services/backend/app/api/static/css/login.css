@@ -1,0 +1,178 @@
+/* Login-Form Section */
+.login-form {
+    border: 1px solid #0f0e0ead;
+    border-radius: 5px;
+    background: radial-gradient(circle at center, #035d6c, rgba(3, 92, 108, 0.750));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #fff;
+    transition: background 0.3s ease;
+    opacity: 75;
+    animation: fade-in 0.5s forwards;
+    animation-delay: 0.5s;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    box-sizing: border-box;
+}
+
+.login-form a {
+    color: #f7a206;
+    text-decoration: none;
+}
+
+.login-form a:hover {
+    color: #000000;
+}
+
+.login-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.login-form form {
+    margin-bottom: 20px;
+}
+
+.login-form form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-form form-group {
+    margin-bottom: 20px;
+}
+
+.login-form form input[type="email"],
+.login-form form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #0c0c0c;
+    border-radius: 5px;
+}
+
+.login-form form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-form form input[type="submit"] {
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-form form input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+.login-form form.error {
+    background: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.login-form form.error.error-message {
+    color: #721c24;
+    background: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.login-form btn {
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-form btn:hover {
+    background: #0056b3;
+}
+
+.cid-uC22EkJlUQ {
+    background: radial-gradient(circle at center, #035d6c, rgba(3, 92, 108, 0.750));
+    text-align: center;
+    color: #fff;
+    transition: background 0.3s ease;
+    opacity: 75;
+    animation: fade-in 0.5s forwards;
+    animation-delay: 0.5s;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    box-sizing: border-box;
+}
+
+.cid-uC22EkJlUQ.btn {
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cid-uC22EkJlUQ.btn:hover {
+    background: #0056b3;
+}
+
+.cid-uC22EkJlUQ.mbr-text {
+    color: #ffffff;
+}
+
+.cid-uC22EkJlUQ.mbr-section-btn {
+    display: flex;
+    margin-bottom: 1.2rem;
+    width: 100%;
+}
+
+.cid-uC22EkJlUQ.mbr-section-btn.btn {
+    width: 100%;
+}
+
+.cid-uC22EkJlUQ a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.cid-uC22EkJlUQ a:focus {
+    outline: none;
+}
+
+.cid-uC22EkJlUQ a:active {
+    color: #3a06f7;
+    text-decoration: underline;
+}
+
+.cid-uC22EkJlUQ a:visited {
+    color: #fff6f6;
+    text-decoration: underline;
+}
+
+.cid-uC22EkJlUQ a:hover {
+    font-weight: bolder;
+    color: #f7a206;
+    text-decoration: underline;
+    border: 2px solid #f7a206;
+    border-radius: 5px;
+    background: radial-gradient(circle at center, #035d6c, rgba(3, 92, 108, 0.750));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: background 0.3s ease;
+    opacity: 75;
+    animation: fade-in 0.5s forwards;
+    animation-delay: 0.5s;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    box-sizing: border-box;
+
+}
+.cid-uC22EkJlUQ .mbr-text {
+    color: #ffffff;
+}

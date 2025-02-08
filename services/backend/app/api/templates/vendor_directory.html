@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Vendor Directory{% endblock %}
+
+{% block navmarker %}<a href="/vendor_directory">Vendor Directory</a>{% endblock %}
+
+{% block maincontent %}
+<ul>
+    {% for vendor in vendors %}
+    <li>
+        <h2>{{ vendor.name }}</h2>
+        <p>{{ vendor.description }}</p>
+        <a href="/vendor/{{ vendor.id }}">View Store</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

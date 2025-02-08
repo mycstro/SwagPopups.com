@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Store{% endblock %}
+
+{% block navmarker %}<a href="/store">Store</a>{% endblock %}
+
+{% block maincontent %}
+    <div class="search-bar">
+        <input type="text" placeholder="Search products...">
+        <button>Search</button>
+    </div>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>${{ product.price }}</p>
+            <button>Add to Cart</button>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block subcontent %}
+    <h2>Featured Products</h2>
+    <ul>
+        {% for featured_product in featured_products %}
+        <li>
+            <a href="/product/{{ featured_product.id }}">{{ featured_product.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Popular Categories</h2>
+    <ul>
+        {% for category in categories %}
+        <li>
+            <a href="/store?category={{ category }}">{{ category }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Recently Added Products</h2>
+    <ul>
+        {% for recent_product in recent_products %}
+        <li>
+            <a href="/product/{{ recent_product.id }}">{{ recent_product.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Top Sellers</h2>
+    <ul>
+        {% for top_seller in top_sellers %}
+        <li>
+            <a href="/vendor/{{ top_seller.id }}">{{ top_seller.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block additionalscripts %}
+    <script>
+        document.querySelector('.search-bar button').addEventListener('click', function() {
+            var searchTerm = document.querySelector('.search-bar input').value;
+            window.location.href = '/store?search=' + searchTerm;
+        });
+    </script>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.querySelector('.product-grid').addEventListener('click', function(event) {
+            if (event.target.tagName === 'BUTTON') {
+                var productId = event.target.closest('.product-card').dataset.productId;
+                window.location.href = '/cart/add/' + productId;
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block headstyles %}
+    <style>
+        .product-card {
+            margin: 10px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}

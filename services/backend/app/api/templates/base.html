@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}SwagPopUps{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}SwagPopUps, online shopping, popups, retail{% endblock %}">
+    <meta name="author" content="{% block author %}SwagPopUps{% endblock %}">
+    <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% block ogtitle %}SwagPopUps{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{% block ogdescription %}SwagPopUps{% endblock %}">
+    <meta property="og:url" content="{{ url_for('main.home') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+    <meta property="og:site_name" content="SwagPopUps">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="SwagPopUps">
+    <meta property="og:image:secure_url" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SwagPopUps">
+    <meta name="twitter:title" content="{% block twittertitle %}SwagPopUps{% endblock %}">
+    <meta name="twitter:description" content="{% block twitterdescription %}SwagPopUps{% endblock %}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='image/og-image.jpg') }}">
+    <meta name="twitter:creator" content="@SwagPopUps">
+    <meta name="twitter:image:alt" content="SwagPopUps">
+    <meta name="twitter:image:secure_url" content="{{ url_for('static', filename='images/og-image.jpg') }}">
+    <meta name="twitter:image:width" content="1200">
+    <meta name="twitter:image:height" content="627">
+    <meta name="twitter:image:type" content="image/jpeg">
+
+    <!-- Page Title -->
+    <title>{% block title %}SwagPopUps{% endblock %}</title>
+
+    <!-- Icons-->
+    <!-- <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" /> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/swagpopups-transparent-large-96x96.png') }}" type="image/x-icon">
+
+  
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" integrity="sha384-HEiFpbe7BAmT9Rprl8Mvo10xyxAH+SNeBQ7ljb2RDBRB9uvmyowdEdGe0RIEmJ2E" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/web/assets/mobirise-icons2/mobirise2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/tether/tether.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap-grid.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap-reboot.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/dropdown/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/animatecss/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/socicon/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/theme/css/style.css') }}">
+    <link rel="preload" as="style" href="{{ url_for('static', filename='assets/mobirise/css/mbr-additional.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='assets/mobirise/css/mbr-additional.css') }}" type="text/css">
+    
+    {% block additionalcss %}{% endblock %}
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-3J3Z4l0lJ3j5Jv6v6v4ZGJ" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-QYfdyHIIBlfL71Zx9hbROZ9V3H2nPAdsmXOvfn6iUCjEm7gh1eNpTtYr7hYH1KtW" crossorigin="anonymous" defer></script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+ 
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" type="text/css" />
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry-layout/4.3.0/masonry.pkgd.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    {% block headscripts %}{% endblock %}
+
+    <!-- Styles -->
+    {% block headstyles %}{% endblock %}
+
+</head>
+    
+<body class="mbr-parallax-background" style="background-image: url('{{ url_for('static', filename='images/Pop-Up-ShopLG.jpg') }}'); background-size: contain">
+    <section class="alert-box">
+        <div class="alert">
+            {% with message = get_flashed_messages(with_categories=true) %}
+                {% if message %}
+                    {% for category, message in message %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show col-12" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </section>
+    <!-- Navigation Bar -->
+    <section class="menu menu3 cid-uC1o6K53lr" once="menu" id="menu3-0">
+        <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+            <div class="container-fluid">
+                <div class="navbar-brand">
+                    <span class="navbar-logo">
+                        <a href="/">
+                            <img src="{{ url_for('static', filename='assets/images/swagpopups-transparent-large-96x96.png') }}" alt="SwagPopUps" style="height: 3rem;">
+                        </a>
+                    </span>
+                    <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-7" href="/">SwagPopUps</a></span>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
+                        {% block navmarker %}
+                            <li class="nav-item">
+                                    <a class="nav-link link text-white display-4" href="/">
+                                        Home
+                                    </a>
+                            </li>
+                        {% endblock %}
+                        {% if session.get('user_id') %}
+                            {% if session.get('is_admin') %}
+                                <li class="nav-item"><a class="nav-link link text-white display-4" href="/admin-dashboard">Admin Dashboard</a></li>
+                            {% else %}
+                                <li class="nav-item"><a class="nav-link link text-white display-4" href="/dashboard">Dashboard</a></li>
+                            {% endif %}
+                            <li class="nav-item"><a class="nav-link link text-white display-4" href="/cart">Cart</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link link text-white display-4" href="/register">Register</a></li>
+                        {% endif %}
+                    </ul>
+                    <div class="icons-menu">
+                        <a class="iconfont-wrapper" href="https://facebook.com" target="_blank">
+                            <span class="p-2 mbr-iconfont socicon-facebook socicon"></span>
+                        </a>
+                        <a class="iconfont-wrapper" href="https://twitter.com" target="_blank">
+                            <span class="p-2 mbr-iconfont socicon-twitter socicon"></span>
+                        </a>
+                        <a class="iconfont-wrapper" href="https://instagram.com" target="_blank">
+                            <span class="p-2 mbr-iconfont socicon-instagram socicon"></span>
+                        </a>
+                        <a class="iconfont-wrapper" href="https://linkedin.com" target="_blank">
+                            <span class="p-2 mbr-iconfont socicon-linkedin socicon"></span>
+                        </a>
+                    </div>
+                    <div class="navbar-buttons mbr-section-btn">
+                        {% if session.get('user_id') %}
+                            <a class="btn btn-primary display-4" href="/logout">
+                                LogOut
+                            </a>
+                        {% else %}
+                            <a class="btn btn-primary display-4" href="/login">
+                                Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </section>
+    <main>
+        {% block header %}{% endblock %}
+        {% block mainbanner %}{% endblock %}
+        {% block promocontent %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block maincontent %}{% endblock %}
+        {% block subcontent %}{% endblock %}
+    </main>
+    <footer class="footer3 cid-uC1omZAGm2" once="footers" id="footer3-2">
+        <div class="container">
+            <div class="media-container-row align-center mbr-white">
+                <div class="row row-links">
+                    <ul class="foot-menu">       
+                        <li class="foot-menu-item mbr-fonts-style display-7">
+                            <a class="text-white" href="#" target="_blank">About us</a>
+                        </li><li class="foot-menu-item mbr-fonts-style display-7">
+                            <a class="text-white" href="#" target="_blank">Services</a>
+                        </li><li class="foot-menu-item mbr-fonts-style display-7">
+                            <a class="text-white" href="#" target="_blank">Contact Us</a>
+                        </li><li class="foot-menu-item mbr-fonts-style display-7">
+                            <a class="text-white" href="#" target="_blank">Careers</a>
+                        </li><li class="foot-menu-item mbr-fonts-style display-7">
+                            <a class="text-white" href="#" target="_blank">Work</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row social-row">
+                    <div class="social-list align-right pb-2">
+                        <div class="soc-item">
+                            <a href="https://twitter.com" target="_blank">
+                                <span class="socicon-twitter socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div><div class="soc-item">
+                            <a href="https://www.facebook.com" target="_blank">
+                                <span class="socicon-facebook socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div><div class="soc-item">
+                            <a href="https://www.youtube.com" target="_blank">
+                                <span class="socicon-youtube socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div><div class="soc-item">
+                            <a href="https://instagram.com" target="_blank">
+                                <span class="socicon-instagram socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div><div class="soc-item">
+                            <a href="https://plus.google.com" target="_blank">
+                                <span class="socicon-googleplus socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div><div class="soc-item">
+                            <a href="https://www.behance.net" target="_blank">
+                                <span class="socicon-behance socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-copirayt">
+                    <p class="mbr-text mb-0 mbr-fonts-style mbr-white align-center display-7">
+                        © Copyright 2025 SwagPopUps. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-B0R+wG5n6M/0lO+PUv4y+rF6l7Q8i9j6JZQ5r9CjwJIBI70xJPU+R3/1dWqM9f5h" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@4.6.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sticksy/dist/sticksy.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@4.6.0"></script>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='assets/web/assets/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/popper/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/tether/tether.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/web/assets/cookies-alert-plugin/cookies-alert-core.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/web/assets/cookies-alert-plugin/cookies-alert-script.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/smoothscroll/smooth-scroll.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/dropdown/js/nav-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/dropdown/js/navbar-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/touchswipe/jquery.touch-swipe.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/viewportchecker/jquery.viewportchecker.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/parallax/jarallax.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrapcarouselswipe/bootstrap-carousel-swipe.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/mbr-testimonials-slider/mbr-testimonials-slider.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/sociallikes/social-likes.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/theme/js/script.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+    {% block additionalscripts %}{% endblock %}
+    {% block footscripts %}{% endblock %}
+
+    <input name="cookieData" type="hidden" data-cookie-customDialogSelector='null' data-cookie-colorText='#424a4d' data-cookie-colorBg='rgba(234, 239, 241, 0.99)' data-cookie-textButton='Agree' data-cookie-colorButton='' data-cookie-colorLink='#424a4d' data-cookie-underlineLink='true' data-cookie-text="We use cookies to give you the best experience. Read our <a href='/privacy.html'>cookie policy</a>.">
+        <input name="animation" type="hidden">    
+</body>
+</html>
+

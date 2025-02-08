@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}Registration{% endblock %}
+
+{% block additionalcss %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/register.css') }}"
+>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css"
+/>
+{% endblock %}
+
+{% block maincontent %}
+<section class="register-form">
+    <h1>Create an Account</h1>
+
+    <!-- The form references your Flask route /register -->
+    <form id="registration_form" class="register-inner" action="{{ url_for('main.registrations') }}" method="POST">
+        {{ form.hidden_tag() }}  <!-- CSRF token -->
+
+        <div class="row identity-row">
+            <!-- Username -->
+            <div class="col-md-6 identity-col-1">
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(id="username") }}
+                    {% for error in form.username.errors %}
+                        <span class="error-message" id="username_server_error">{{ error }}</span>
+                    {% endfor %}
+                    <!-- Client-side error goes here -->
+                    <span class="error-message" id="username_error"></span>
+                </div>
+            </div>
+                
+            <!-- Email -->
+            <div class="col-md-6 identity-col-2">
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(id="email") }}
+                    {% for error in form.email.errors %}
+                        <span class="error-message" id="email_server_error">{{ error }}</span>
+                    {% endfor %}
+                    <span class="error-message" id="email_error"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Password & Confirm Password side by side -->
+        <div class="row password-row">
+            <!-- Password Column -->
+            <div class="col-md-6 password-col">
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(id="password") }}
+                    {% for error in form.password.errors %}
+                    <span class="error-message" id="password_server_error">{{ error }}</span>
+                    {% endfor %}
+                    <span class="error-message" id="password_error"></span>
+                </div>
+            </div>
+        
+            <!-- Confirm Password Column -->
+            <div class="col-md-6 password-col">
+                <div class="form-group">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(id="confirm_password") }}
+                    {% for error in form.confirm_password.errors %}
+                    <span class="error-message" id="confirm_password_server_error">{{ error }}</span>
+                    {% endfor %}
+                    <span class="error-message" id="confirm_password_error"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row name-row">
+
+          <!-- First Name -->
+          <div class="col-md-6 name-col">
+            <div class="form-group">
+                {{ form.first_name.label }}
+                {{ form.first_name(id='first_name', required=True) }}
+                {% for error in form.first_name.errors %}
+                    <span class="error-message" id="first_name_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="first_name_error"></span>
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="col-md-6 name-col">
+            <div class="form-group">
+                {{ form.last_name.label }}
+                {{ form.last_name(id='last_name', required=True) }}
+                {% for error in form.last_name.errors %}
+                    <span class="error-message" id="last_name_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="last_name_error"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row phone-row">
+            <!-- Country Code (dropdown) -->
+            <div class="form-group col-md-3 phone-col-2">
+                {{ form.phone_country_code.label }}
+                {{ form.phone_country_code(id='phone_country_code', required=True) }}
+                {% for error in form.phone_country_code.errors %}
+                    <span class="error-message" id="phone_country_code_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="phone_country_code_error"></span>
+            </div>
+
+            <!-- Area Code -->
+            <div class="form-group col-md-3 phone-col-3">
+                {{ form.phone_area_code.label }}
+                {{ form.phone_area_code(id='phone_area_code', required=True) }}
+                {% for error in form.phone_area_code.errors %}
+                    <span class="error-message" id="phone_area_code_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="phone_area_code_error"></span>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group col-md-9 phone-col-9">
+                {{ form.phone_number.label }}
+                {{ form.phone_number(id='phone_number', required=True) }}
+                {% for error in form.phone_number.errors %}
+                    <span class="error-message" id="phone_number_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="phone_number_error"></span>
+            </div>
+        </div>
+
+        <div class="col address-col-1">
+          <div class="row address-row-1">
+            <!-- Street Address -->
+            <div class="form-group">
+                {{ form.street_address.label }}
+                {{ form.street_address(id='street_address', required=True) }}
+                {% for error in form.street_address.errors %}
+                    <span class="error-message" id="street_address_error">{{ error }}</span>
+                {% endfor %}
+                <span class="error-message" id="street_address_error"></span>
+            </div>
+          </div>
+
+          <div class="row address-row-2">
+            <div class="col-md-3 address-col-2">
+              <!-- City (label changes based on country code) -->
+              <div class="form-group">
+                  <label for="city" id="city_label">City</label>
+                  {{ form.city(id='city', required=True) }}
+                  {% for error in form.city.errors %}
+                      <span class="error-message" id="city_error">{{ error }}</span>
+                  {% endfor %}
+                  <span class="error-message" id="city_error"></span>
+              </div>
+            </div>
+
+            <div class="col-md-3 address-col-3">
+              <!-- State (label changes based on country code) -->
+              <div class="form-group">
+                  <label for="state" id="state_label">State</label>
+                  {{ form.state(id='state', required=True) }}
+                  {% for error in form.state.errors %}
+                      <span class="error-message" id="state_error">{{ error }}</span>
+                  {% endfor %}
+                  <span class="error-message" id="state_error"></span>
+              </div>
+            </div>
+
+            <div class="col-md-3 address-col-4">
+              <!-- Zip Code (label changes based on country code) -->
+              <div class="form-group">
+                  <label for="zip_code" id="zip_label">Zip Code</label>
+                  {{ form.zip_code(id='zip_code', required=True) }}
+                  {% for error in form.zip_code.errors %}
+                      <span class="error-message" id="zip_code_error">{{ error }}</span>
+                  {% endfor %}
+                  <span class="error-message" id="zip_code_error"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Birthdate -->
+        <div class="form-group">
+            <label for="birthdate" class="form-label">
+                {{ form.birthdate.label.text }}
+            </label>
+            <div class="input-group date" id="birthdatePicker">
+                {{ form.birthdate(class_="form-control", id="birthdate", required=True) }}
+                <!-- Optionally add an icon -->
+                <span class="input-group-text">
+                    <i class="bi bi-calendar3"></i>
+                </span>
+            </div>
+            {% for error in form.birthdate.errors %}
+                <span class="error-message" id="birthdate_error">{{ error }}</span>
+            {% endfor %}
+            <span class="error-message" id="birthdate_error"></span>
+        </div>
+
+        <!-- Membership Type -->
+        <div class="form-group">
+            {{ form.membership_type.label }}
+            {{ form.membership_type(id='membership_type', required=True) }}
+            {% for error in form.membership_type.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Subscription Level -->
+        <div class="form-group">
+            {{ form.submembership_type.label }}
+            {{ form.submembership_type(id='submembership_type', required=True) }}
+            {% for error in form.submembership_type.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Submit Button (initially disabled if using client-side checks) -->
+        <button type="submit" id="submitBtn" class="btn">
+            Register
+        </button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- Optional: bootstrap icons if you want the calendar icon to show -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
+{% endblock %}
+
+{% block additionalscripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ------------------------------------------------------------------
+  // OPTIONAL: Clear the form each time the page loads
+  // document.getElementById('registration_form').reset();
+
+  // ------------------------------------------------------------------
+  // 1. Dynamic Submembership Logic
+  //    Fetch subscription levels from /api/submembership_types/<membership_type>
+  // ------------------------------------------------------------------
+  const membershipTypeSelect = document.getElementById('membership_type');
+  const submembershipTypeSelect = document.getElementById('submembership_type');
+
+  function updateSubmembershipOptions() {
+    const membershipType = membershipTypeSelect.value;
+    fetch(`/api/submembership_types/${membershipType}`)
+      .then(response => response.json())
+      .then(data => {
+        submembershipTypeSelect.innerHTML = '';
+        data.forEach(subType => {
+          const option = document.createElement('option');
+          option.value = subType;
+          // Capitalize first letter
+          option.textContent = subType.charAt(0).toUpperCase() + subType.slice(1);
+          submembershipTypeSelect.appendChild(option);
+        });
+      })
+      .catch(err => console.error(err));
+  }
+
+  membershipTypeSelect.addEventListener('change', updateSubmembershipOptions);
+  // Run once on page load if membership_type has a default
+  updateSubmembershipOptions();
+
+  // ------------------------------------------------------------------
+  // 2. Country-Code-Based Label Adjustments
+  //    Adjust city, state, zip labels depending on phone_country_code
+  // ------------------------------------------------------------------
+  const phoneCountryCodeSelect = document.getElementById('phone_country_code');
+  const cityLabel = document.getElementById('city_label');
+  const stateLabel = document.getElementById('state_label');
+  const zipLabel = document.getElementById('zip_label');
+
+  // Example dictionary for different country codes:
+  const addressFieldMappings = {
+    '+1': {
+      cityLabel: 'City',
+      regionLabel: 'State',
+      postalLabel: 'Zip Code'
+    },
+    '+44': {
+      cityLabel: 'Town/City',
+      regionLabel: 'County',
+      postalLabel: 'Postcode'
+    },
+    // Fallback if none match
+    'default': {
+      cityLabel: 'City/Town',
+      regionLabel: 'Region/State',
+      postalLabel: 'Postal Code'
+    }
+  };
+
+  function updateAddressFields() {
+    const code = phoneCountryCodeSelect.value;
+    const mapping = addressFieldMappings[code] || addressFieldMappings['default'];
+    cityLabel.textContent = mapping.cityLabel;
+    stateLabel.textContent = mapping.regionLabel;
+    zipLabel.textContent = mapping.postalLabel;
+  }
+
+  phoneCountryCodeSelect.addEventListener('change', updateAddressFields);
+  // Call once on load
+  updateAddressFields();
+
+  // ------------------------------------------------------------------
+  // 3. Initialize Datepicker (Assuming you have #birthdatePicker)
+  // ------------------------------------------------------------------
+  $('#birthdatePicker').datepicker({
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+    todayHighlight: true
+  });
+
+  // ------------------------------------------------------------------
+  // 4. (Optional) On-Blur Field Validation for Immediate Feedback
+  //    Below is a sample for username, email, password, confirm
+  // ------------------------------------------------------------------
+  const usernameField = document.getElementById('username');
+  const usernameError = document.getElementById('username_error');
+  const emailField = document.getElementById('email');
+  const emailError = document.getElementById('email_error');
+  const passwordField = document.getElementById('password');
+  const passwordError = document.getElementById('password_error');
+  const confirmPasswordField = document.getElementById('confirm_password');
+  const confirmPasswordError = document.getElementById('confirm_password_error');
+
+  // Example validation for username
+  function validateUsername() {
+    const val = usernameField.value.trim();
+    if (!val) {
+      usernameError.textContent = 'Username is required.';
+      return false;
+    } else if (val.length < 4 || val.length > 80) {
+      usernameError.textContent = 'Must be 4-80 characters.';
+      return false;
+    } else {
+      usernameError.textContent = '';
+      return true;
+    }
+  }
+
+  // Example validation for email
+  function validateEmail() {
+    const val = emailField.value.trim();
+    if (!val) {
+      emailError.textContent = 'Email is required.';
+      return false;
+    } else if (!/^[^@]+@[^@]+\.[^@]+$/.test(val)) {
+      emailError.textContent = 'Invalid email format.';
+      return false;
+    } else {
+      emailError.textContent = '';
+      return true;
+    }
+  }
+
+  // Example validation for password
+  function validatePassword() {
+    const val = passwordField.value;
+    if (!val) {
+      passwordError.textContent = 'Password is required.';
+      return false;
+    } else if (val.length < 6) {
+      passwordError.textContent = 'At least 6 characters.';
+      return false;
+    } else {
+      passwordError.textContent = '';
+      return true;
+    }
+  }
+
+  // Example validation for confirm password
+  function validateConfirmPassword() {
+    const p1 = passwordField.value;
+    const p2 = confirmPasswordField.value;
+    if (!p2) {
+      confirmPasswordError.textContent = 'Confirm your password.';
+      return false;
+    } else if (p1 !== p2) {
+      confirmPasswordError.textContent = 'Passwords do not match.';
+      return false;
+    } else {
+      confirmPasswordError.textContent = '';
+      return true;
+    }
+  }
+
+  // Attach 'blur' events for immediate feedback:
+  usernameField.addEventListener('blur', validateUsername);
+  emailField.addEventListener('blur', validateEmail);
+  passwordField.addEventListener('blur', validatePassword);
+  confirmPasswordField.addEventListener('blur', validateConfirmPassword);
+
+  // ------------------------------------------------------------------
+  // 5. Final check on submit to block submission if fields invalid
+  // ------------------------------------------------------------------
+  const form = document.getElementById('registration_form');
+  form.addEventListener('submit', function(e) {
+    // Validate everything again on final submission
+    const ok1 = validateUsername();
+    const ok2 = validateEmail();
+    const ok3 = validatePassword();
+    const ok4 = validateConfirmPassword();
+    // ... replicate for other fields as needed
+
+    if (!ok1 || !ok2 || !ok3 || !ok4 /* ... */) {
+      e.preventDefault(); // block form submission
+    }
+  });
+});
+</script>
+{% endblock %}
+

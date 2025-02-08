@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Store{% endblock %}
+
+{% block navmarker %}<a href="/store">Store</a>{% endblock %}
+
+{% block maincontent %}
+    <section class="vendor-details">
+        <h2>About {{ vendor.name }}</h2>
+        <p>{{ vendor.description }}</p>
+    </section>
+    <section class="filters">
+        <h3>Filter Products</h3>
+        <div>
+            <label for="categoryFilter">Category:</label>
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+        </div>
+        <div>
+            <label for="priceFilter">Max Price:</label>
+            <input type="number" id="priceFilter" placeholder="Enter max price">
+        </div>
+        <button id="applyFilters">Apply Filters</button>
+    </section>
+    <section class="product-grid" id="productGrid">
+        {% for product in vendor.products %}
+        <div class="product-card" data-category="{{ product.category }}" data-price="{{ product.price }}">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>${{ product.price }}</p>
+            <button>Add to Cart</button>
+        </div>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block additionalscripts %}
+    <script>
+        document.getElementById('applyFilters').addEventListener('click', function() {
+            var categoryFilter = document.getElementById('categoryFilter').value;
+            var priceFilter = document.getElementById('priceFilter').value;
+            var productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(function(card) {
+                var category = card.getAttribute('data-category');
+                var price = card.getAttribute('data-price');
+                if ((categoryFilter === '' || categoryFilter === category) && (priceFilter === '' || price <= priceFilter)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            document.getElementById('applyFilters').click();
+        });
+        
+        document.getElementById('priceFilter').addEventListener('input', function() {
+            document.getElementById('applyFilters').click();
+        });
+        
+        // Add event listener for adding items to the cart
+        var addToCartButtons = document.querySelectorAll('.product-card button');
+        addToCartButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                alert('Item added to cart!');
+            });
+        });
+        
+        // Add event listener for removing items from the cart
+        var removeFromCartButtons = document.querySelectorAll('.cart-item button');
+        removeFromCartButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                alert('Item removed from cart!');
+            });
+        });
+        
+        // Add event listener for updating item quantities in the cart
+        var quantityInputs = document.querySelectorAll('.cart-item input');
+        quantityInputs.forEach(function(input) {
+            input.addEventListener('input', function() {
+                alert('Item quantity updated!');
+            });
+        });
+        
+        // Add event listener for checkout button
+        document.getElementById('checkoutButton').addEventListener('click', function() {
+            alert('Checkout successful!');
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.name }}'s Profile{% endblock %}
+
+{% block navmarker %}<a href="#">{{ customer.name }}'s Profile</a>{% endblock %}
+
+{% block maincontent %}
+    <section>
+        <h2>Account Details</h2>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" value="{{ user.name }}" readonly>
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="{{ user.email }}" readonly>
+        </form>
+    </section>
+    <section>
+        <h2>Purchase History</h2>
+        <ul>
+            {% for order in orders %}
+            <li>Order #{{ order.id }} - ${{ order.total }} - {{ order.date }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}

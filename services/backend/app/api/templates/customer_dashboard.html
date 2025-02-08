@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.name }}'s Dashboard{% endblock %}
+
+{% block navmarker %}<a href="/dashboard">Dashboard</a>{% endblock %}
+
+{% block maincontent %}
+    <section class="dashboard">
+        <h1>Welcome to Your Customer Dashboard</h1>
+        <h2>{{ customer.name }}</h2>
+    </section>
+{% endblock %}

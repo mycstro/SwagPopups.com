@@ -1,0 +1,733 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block additionalcss %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css"/>
+<link rel="stylesheet" href="assets/web/assets/gdpr-plugin/gdpr-styles.css"/>
+{% endblock %}
+
+{% block navmarker %}
+  <li class="nav-item"><a class="nav-link link text-white display-4" href="/">Home</a></li>
+  <li class="nav-item"><a class="nav-link link text-white display-4" href="/about_us">About</a></li>
+  <li class="nav-item"><a class="nav-link link text-white display-4" href="/contact">Contact Us</a></li>
+{% endblock %}
+
+{% block maincontent %}
+<section class="form5 profile-setup" id="form5-m" style="margin-top:6.5rem; padding-top:2rem;">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="mbr-section-head">
+            <h1 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                <strong>{% if session.get('username') %} <i class="fas fa-user"></i> {{ session.get('username')|capitalize }}{% endif %} Profile</strong>
+            </h1>
+        </div>
+
+    <!-- Form Row -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
+            <!-- Profile Form -->        
+            <form id="profile_form" class="mbr-form form-with-styler" action="{{ url_for('main.profile') }}" method="POST">
+                {{ form.hidden_tag() }}  <!-- CSRF Protection -->
+                <div class="">
+                    <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out
+                        the form!</div>
+                    <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! some
+                        problem!</div>
+                </div>
+                <!-- Identity Fields: Username & Email -->
+                <div class="dragArea row identity-row">
+                    <!-- Username -->
+                    <div class="col-md col-md-6 identity-col-1">
+                    <div class="form-group">
+                        {{ form.username.label }}
+                        {{ form.username(id="username") }}
+                        {% for error in form.username.errors %}
+                        <span class="error-message" id="username_server_error">{{ error }}</span>
+                        {% endfor %}
+                        <span class="error-message" id="username_error"></span>
+                    </div>
+                    </div>
+                    <!-- Email -->
+                    <div class="col-md col-md-6 identity-col-2">
+                    <div class="form-group">
+                        {{ form.email.label }}
+                        {{ form.email(id="email") }}
+                        {% for error in form.email.errors %}
+                        <span class="error-message" id="email_server_error">{{ error }}</span>
+                        {% endfor %}
+                        <span class="error-message" id="email_error"></span>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Password Fields -->
+                <div class="row password-row">
+                    <!-- Password -->
+                    <div class="col-md col-md-6 password-col">
+                    <div class="form-group">
+                        {{ form.password.label }}
+                        {{ form.password(id="password") }}
+                        {% for error in form.password.errors %}
+                        <span class="error-message" id="password_server_error">{{ error }}</span>
+                        {% endfor %}
+                        <span class="error-message" id="password_error"></span>
+                    </div>
+                    </div>
+                    <!-- Confirm Password -->
+                    <div class="col-md col-md-6 password-col">
+                    <div class="form-group">
+                        {{ form.confirm_password.label }}
+                        {{ form.confirm_password(id="confirm_password") }}
+                        {% for error in form.confirm_password.errors %}
+                        <span class="error-message" id="confirm_password_server_error">{{ error }}</span>
+                        {% endfor %}
+                        <span class="error-message" id="confirm_password_error"></span>
+                    </div>
+                    </div>
+                </div>                
+                <!-- Identity Fields: First Name & Last Name -->
+                <div class="dragArea row identity-row">
+                    <!-- Name Fields -->
+                    <div class="row name-row">
+                        <!-- First Name -->
+                        <div class="col-md col-md-6 name-col">
+                            <div class="form-group">
+                                {{ form.first_name.label }}
+                                {{ form.first_name(id='first_name') }}
+                                {% for error in form.first_name.errors %}
+                                    <span class="error-message" id="first_name_error">{{ error }}</span>
+                                {% endfor %}
+                                <span class="error-message" id="first_name_error"></span>
+                            </div>
+                        </div>
+                            <!-- Last Name -->
+                            <div class="col-md col-md-6 name-col">
+                                <div class="form-group">
+                                    {{ form.last_name.label }}
+                                    {{ form.last_name(id='last_name') }}
+                                    {% for error in form.last_name.errors %}
+                                        <span class="error-message" id="last_name_error">{{ error }}</span>
+                                    {% endfor %}
+                                    <span class="error-message" id="last_name_error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Phone Fields -->
+                    <div class="row phone-row">
+                        <!-- Country Code -->
+                        <div class="col-md form-group col-md-3 phone-col-2">
+                            {{ form.phone_country_code.label }}
+                            {{ form.phone_country_code(id='phone_country_code') }}
+                            {% for error in form.phone_country_code.errors %}
+                                <span class="error-message" id="phone_country_code_error">{{ error }}</span>
+                            {% endfor %}
+                            <span class="error-message" id="phone_country_code_error"></span>
+                        </div>
+                        <!-- Area Code -->
+                        <div class="col-md form-group col-md-3 phone-col-3">
+                            {{ form.phone_area_code.label }}
+                            {{ form.phone_area_code(id='phone_area_code') }}
+                            {% for error in form.phone_area_code.errors %}
+                                <span class="error-message" id="phone_area_code_error">{{ error }}</span>
+                            {% endfor %}
+                            <span class="error-message" id="phone_area_code_error"></span>
+                        </div>
+                        <!-- Phone Number -->
+                        <div class="col-md form-group col-md-9 phone-col-9">
+                            {{ form.phone_number.label }}
+                            {{ form.phone_number(id='phone_number') }}
+                            {% for error in form.phone_number.errors %}
+                                <span class="error-message" id="phone_number_error">{{ error }}</span>
+                            {% endfor %}
+                            <span class="error-message" id="phone_number_error"></span>
+                        </div>
+                    </div>
+
+                    <!-- Address Fields -->
+                    <div class="row address-row">
+                        <div class="col address-col-1">
+                            <!-- Street Address -->
+                            <div class="row address-row-1">
+                                <div class="form-group">
+                                    {{ form.street_address.label }}
+                                    {{ form.street_address(id='street_address') }}
+                                    {% for error in form.street_address.errors %}
+                                        <span class="error-message" id="street_address_error">{{ error }}</span>
+                                    {% endfor %}
+                                    <span class="error-message" id="street_address_error"></span>
+                                </div>
+                            </div>
+                            <!-- City, State, & Zip Code -->
+                            <div class="row address-row-2">
+                                <!-- City -->
+                                <div class="col-md-3 address-col-2">
+                                    <div class="form-group">
+                                        <label for="city" id="city_label">City</label>
+                                        {{ form.city(id='city') }}
+                                        {% for error in form.city.errors %}
+                                            <span class="error-message" id="city_error">{{ error }}</span>
+                                        {% endfor %}
+                                        <span class="error-message" id="city_error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- State -->
+                            <div class="col-md-3 address-col-3">
+                                <div class="form-group">
+                                    <label for="state" id="state_label">State</label>
+                                    {{ form.state(id='state') }}
+                                    {% for error in form.state.errors %}
+                                        <span class="error-message" id="state_error">{{ error }}</span>
+                                    {% endfor %}
+                                    <span class="error-message" id="state_error"></span>
+                                </div>
+                            </div>
+                            <!-- Zip Code -->
+                            <div class="col-md-3 address-col-4">
+                                <div class="form-group">
+                                    <label for="zip_code" id="zip_label">Zip Code</label>
+                                    {{ form.zip_code(id='zip_code') }}
+                                    {% for error in form.zip_code.errors %}
+                                        <span class="error-message" id="zip_code_error">{{ error }}</span>
+                                    {% endfor %}
+                                    <span class="error-message" id="zip_code_error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Birthdate -->
+                    <div class="row birthdate-row">
+                        <div class="col-md col-md-3 birthdate-col-1">
+                            <label for="birthdate" class="form-label">{{ form.birthdate.label.text }}</label>
+                        </div>
+                        <div class="col-md col-md-9 birthdate-col-2">
+                            <div class="form-group">
+                                <div class="input-group date" id="birthdatePicker">
+                                    {{ form.birthdate(class_="form-control", id="birthdate") }}
+                                    <span class="input-group-text">
+                                        <i class="bi bi-calendar3"></i>
+                                    </span>
+                                </div>
+                                {% for error in form.birthdate.errors %}
+                                <span class="error-message" id="birthdate_error">{{ error }}</span>
+                                {% endfor %}
+                                <span class="error-message" id="birthdate_error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Membership Selection -->
+                    <div class="form-group">
+                        {{ form.membership_type.label }}
+                        {{ form.membership_type(id='membership_type') }}
+                        {% for error in form.membership_type.errors %}
+                        <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.submembership_type.label }}
+                        {{ form.submembership_type(id='submembership_type') }}
+                        {% for error in form.submembership_type.errors %}
+                        <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </div>                        
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mbr-section-btn align-center">
+                    {{ form.submit(id="submitBtn", class="btn btn-secondary display-4") }}
+                    <!-- <button type="submit" id="submitBtn" class="btn btn-primary display-4">Register</button> -->
+                </div>
+            </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- Optional: bootstrap icons if you want the calendar icon to show -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+{% endblock %}
+
+{% block additionalscripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // ------------------------------------------------------------------
+    // OPTIONAL: Clear the form each time the page loads
+    // document.getElementById('profile_form').reset();
+
+    // ------------------------------------------------------------------
+    // 1. Dynamic Submembership Logic
+    //    Fetch subscription levels from /api/submembership_types/<membership_type>
+    // ------------------------------------------------------------------
+    const membershipTypeSelect = document.getElementById('membership_type');
+    const submembershipTypeSelect = document.getElementById('submembership_type');
+
+    function updateSubmembershipOptions() {
+        const membershipType = membershipTypeSelect.value;
+        fetch(`/api/submembership_types/${membershipType}`)
+        .then(response => response.json())
+        .then(data => {
+            submembershipTypeSelect.innerHTML = '';
+            data.forEach(subType => {
+            const option = document.createElement('option');
+            option.value = subType;
+            // Capitalize first letter
+            option.textContent = subType.charAt(0).toUpperCase() + subType.slice(1);
+            submembershipTypeSelect.appendChild(option);
+            });
+        })
+        .catch(err => console.error(err));
+    }
+
+    membershipTypeSelect.addEventListener('change', updateSubmembershipOptions);
+    // Run once on page load if membership_type has a default
+    updateSubmembershipOptions();
+
+    // ------------------------------------------------------------------
+    // 2. Country-Code-Based Label Adjustments
+    //    Adjust city, state, zip labels depending on phone_country_code
+    // ------------------------------------------------------------------
+    const phoneCountryCodeSelect = document.getElementById('phone_country_code');
+    const cityLabel = document.getElementById('city_label');
+    const stateLabel = document.getElementById('state_label');
+    const zipLabel = document.getElementById('zip_label');
+
+    // Example dictionary for different country codes:
+    const addressFieldMappings = {
+        '+1': {
+        cityLabel: 'City',
+        regionLabel: 'State',
+        postalLabel: 'Zip Code'
+        },
+        '+44': {
+        cityLabel: 'Town/City',
+        regionLabel: 'County',
+        postalLabel: 'Postcode'
+        },
+        // Fallback if none match
+        'default': {
+        cityLabel: 'City/Town',
+        regionLabel: 'Region/State',
+        postalLabel: 'Postal Code'
+        }
+    };
+
+    function updateAddressFields() {
+        const code = phoneCountryCodeSelect.value;
+        const mapping = addressFieldMappings[code] || addressFieldMappings['default'];
+        cityLabel.textContent = mapping.cityLabel;
+        stateLabel.textContent = mapping.regionLabel;
+        zipLabel.textContent = mapping.postalLabel;
+    }
+
+    phoneCountryCodeSelect.addEventListener('change', updateAddressFields);
+    // Call once on load
+    updateAddressFields();
+
+    // ------------------------------------------------------------------
+    // 3. Initialize Datepicker (Assuming you have #birthdatePicker)
+    // ------------------------------------------------------------------
+    $('#birthdatePicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true
+    });
+    
+  // Get the select field element
+      var areaCodeField = document.getElementById("{{ form.phone_area_code.id }}");
+      // Mapping from location to area codes from the config (passed in as JSON)
+      var areaCodesByLocation = {{ config.AREA_CODES_BY_LOCATION | tojson }};
+      
+      // Build the initial list of location choices
+      var initialChoices = [];
+      for (var loc in areaCodesByLocation) {
+        initialChoices.push({value: loc, text: loc});
+      }
+      
+      // Function to populate the select field with location choices
+      function populateLocations() {
+        areaCodeField.innerHTML = "";
+        // Add a default option
+        var defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.text = "Select a location";
+        areaCodeField.appendChild(defaultOption);
+        
+        // Add each location as an option
+        initialChoices.forEach(function(choice) {
+          var opt = document.createElement("option");
+          opt.value = choice.value;
+          opt.text = choice.text;
+          areaCodeField.appendChild(opt);
+        });
+      }
+      
+      // Function to populate the select field with area codes for a given location
+      function populateAreaCodes(location) {
+        areaCodeField.innerHTML = "";
+        // Add an option to allow returning to location selection
+        var backOption = document.createElement("option");
+        backOption.value = "";
+        backOption.text = "← Area Code or Change location";
+        areaCodeField.appendChild(backOption);
+        
+        // Populate the area codes for the chosen location
+        areaCodesByLocation[location].forEach(function(codePair) {
+          var opt = document.createElement("option");
+          opt.value = codePair[0]; // The area code
+          opt.text = codePair[1];  // The description (e.g., "212 - Manhattan")
+          areaCodeField.appendChild(opt);
+        });
+      }
+      
+      // Initially, the field is populated with location choices.
+      populateLocations();
+      
+      // Listen for changes on the select field.
+      areaCodeField.addEventListener("change", function() {
+        var selectedValue = areaCodeField.value;
+        // If the selected value is a location (i.e. a key in our mapping)
+        if (areaCodesByLocation.hasOwnProperty(selectedValue)) {
+          // Replace the options with the area codes for that location.
+          populateAreaCodes(selectedValue);
+        }
+        // If the user chooses the "Change location" option (empty value), re-populate locations.
+        else if (selectedValue === "") {
+          populateLocations();
+        }
+      });
+
+  /**
+   * Attach on-blur validation to a field and track if it has been modified.
+   * @param {HTMLElement} field - The input field to attach events to.
+   * @param {Function} validateFn - The validation function to call on blur.
+   */
+   function attachValidation(field, validateFn) {
+    // Initially mark the field as not modified.
+    field.modified = false;
+    // On any input, mark the field as modified.
+    field.addEventListener('input', function() {
+      field.modified = true;
+    });
+    // On blur, if the field was modified, run its validation function.
+    field.addEventListener('blur', function() {
+      if (field.modified) {
+        validateFn();
+      }
+    });
+  }
+
+  // --------------------------------------------------
+  // Per-Field Validation Functions
+  // --------------------------------------------------
+
+  function validateUsername() {
+    if (usernameField.value.trim() === '') {
+      usernameError.innerText = 'Username is required.';
+      return false;
+    } else if (usernameField.value.trim().length < 4) {
+      usernameError.innerText = 'Username must be at least 4 characters long.';
+      return false;
+    } else {
+      usernameError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateEmail() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailField.value.trim() === '') {
+      emailError.innerText = 'Email is required.';
+      return false;
+    } else if (!emailRegex.test(emailField.value.trim())) {
+      emailError.innerText = 'Please enter a valid email address.';
+      return false;
+    } else {
+      emailError.innerText = '';
+      return true;
+    }
+  }
+
+  function validatePassword() {
+    if (passwordField.value === '') {
+      passwordError.innerText = 'Password is required.';
+      return false;
+    } else if (passwordField.value.length < 6) {
+      passwordError.innerText = 'Password must be at least 6 characters long.';
+      return false;
+    } else {
+      passwordError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateConfirmPassword() {
+    if (confirmPasswordField.value === '') {
+      confirmPasswordError.innerText = 'Please confirm your password.';
+      return false;
+    } else if (confirmPasswordField.value !== passwordField.value) {
+      confirmPasswordError.innerText = 'Passwords do not match.';
+      return false;
+    } else {
+      confirmPasswordError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateFirstName() {
+    if (first_nameField.value.trim() === '') {
+      first_nameError.innerText = 'First name is required.';
+      return false;
+    } else {
+      first_nameError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateLastName() {
+    if (last_nameField.value.trim() === '') {
+      last_nameError.innerText = 'Last name is required.';
+      return false;
+    } else {
+      last_nameError.innerText = '';
+      return true;
+    }
+  }
+
+  function validatePhoneCountryCode() {
+    if (phoneCountryCodeField.value.trim() === '') {
+      phone_country_codeError.innerText = 'Country code is required.';
+      return false;
+    } else if (!/^\+?[0-9]+$/.test(phoneCountryCodeField.value.trim())) {
+      phone_country_codeError.innerText = 'Please enter a valid country code.';
+      return false;
+    } else {
+      phone_country_codeError.innerText = '';
+      return true;
+    }
+  }
+
+  function validatePhoneAreaCode() {
+    if (phone_area_code.value.trim() === '') {
+      phone_area_code_error.innerText = 'Area code is required.';
+      return false;
+    } else if (!/^[0-9]+$/.test(phone_area_code.value.trim())) {
+      phone_area_code_error.innerText = 'Please enter a valid area code.';
+      return false;
+    } else {
+      phone_area_code_error.innerText = '';
+      return true;
+    }
+  }
+
+  function validatePhoneNumber() {
+    if (phone_number.value.trim() === '') {
+      phone_error.innerText = 'Phone number is required.';
+      return false;
+    } else if (!/^[0-9]+$/.test(phone_number.value.trim())) {
+      phone_error.innerText = 'Please enter a valid phone number.';
+      return false;
+    } else {
+      phone_error.innerText = '';
+      return true;
+    }
+  }
+
+  function validateStreetAddress() {
+    if (street_address.value.trim() === '') {
+      street_address_error.innerText = 'Street address is required.';
+      return false;
+    } else {
+      street_address_error.innerText = '';
+      return true;
+    }
+  }
+
+  function validateCity() {
+    if (cityField.value.trim() === '') {
+      cityError.innerText = 'City is required.';
+      return false;
+    } else {
+      cityError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateState() {
+    if (stateField.value.trim() === '') {
+      stateError.innerText = 'State is required.';
+      return false;
+    } else {
+      stateError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateZipCode() {
+    if (zipField.value.trim() === '') {
+      zipError.innerText = 'Zip code is required.';
+      return false;
+    } else if (!/^\d{5}(-\d{4})?$/.test(zipField.value.trim())) {
+      zipError.innerText = 'Please enter a valid zip code.';
+      return false;
+    } else {
+      zipError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateBirthdate() {
+    if (birthdate.value.trim() === '') {
+      birthdateError.innerText = 'Birthdate is required.';
+      return false;
+    } else {
+      const dateValue = Date.parse(birthdate.value);
+      if (isNaN(dateValue)) {
+        birthdateError.innerText = 'Please enter a valid date.';
+        return false;
+      } else {
+        birthdateError.innerText = '';
+        return true;
+      }
+    }
+  }
+
+  function validateMembershipType() {
+    if (membershipTypeField.value === '') {
+      membership_typeError.innerText = 'Membership type is required.';
+      return false;
+    } else {
+      membership_typeError.innerText = '';
+      return true;
+    }
+  }
+
+  function validateSubmembershipType() {
+    if (submembershipTypeField.value === '') {
+      submembership_typeError.innerText = 'Submembership type is required.';
+      return false;
+    } else {
+      submembership_typeError.innerText = '';
+      return true;
+    }
+  }
+
+  /**
+   * Validate the entire form by running each field's validation.
+   * @returns {boolean} True if the form is valid, false otherwise.
+   */
+  function validateForm() {
+    let isValid = true;
+    if (!validateUsername()) isValid = false;
+    if (!validateEmail()) isValid = false;
+    if (!validatePassword()) isValid = false;
+    if (!validateConfirmPassword()) isValid = false;
+    if (!validateFirstName()) isValid = false;
+    if (!validateLastName()) isValid = false;
+    if (!validatePhoneCountryCode()) isValid = false;
+    if (!validatePhoneAreaCode()) isValid = false;
+    if (!validatePhoneNumber()) isValid = false;
+    if (!validateStreetAddress()) isValid = false;
+    if (!validateCity()) isValid = false;
+    if (!validateState()) isValid = false;
+    if (!validateZipCode()) isValid = false;
+    if (!validateBirthdate()) isValid = false;
+    if (!validateMembershipType()) isValid = false;
+    if (!validateSubmembershipType()) isValid = false;
+    return isValid;
+  }
+
+  // --------------------------------------------------
+  // Get References to Form Fields & Error Containers
+  // --------------------------------------------------
+
+  const usernameField = document.getElementById('username');
+  const usernameError = document.getElementById('username_error');
+  const emailField = document.getElementById('email');
+  const emailError = document.getElementById('email_error');
+  const passwordField = document.getElementById('password');
+  const passwordError = document.getElementById('password_error');
+  const confirmPasswordField = document.getElementById('confirm_password');
+  const confirmPasswordError = document.getElementById('confirm_password_error');
+  const first_nameField = document.getElementById('first_name');
+  const first_nameError = document.getElementById('first_name_error');
+  const last_nameField = document.getElementById('last_name');
+  const last_nameError = document.getElementById('last_name_error');
+  const phoneCountryCodeField = document.getElementById('phone_country_code');
+  const phone_country_codeError = document.getElementById('phone_country_code_error');
+  const phone_area_code = document.getElementById('phone_area_code');
+  const phone_area_code_error = document.getElementById('phone_area_code_error');
+  const phone_number = document.getElementById('phone_number');
+  const phone_error = document.getElementById('phone_error');
+  const street_address = document.getElementById('street_address');
+  const street_address_error = document.getElementById('street_address_error');
+  const cityField = document.getElementById('city');
+  const cityError = document.getElementById('city_error');
+  const stateField = document.getElementById('state');
+  const stateError = document.getElementById('state_error');
+  const zipField = document.getElementById('zip_code');
+  const zipError = document.getElementById('zip_code_error');
+  const birthdate = document.getElementById('birthdate');
+  const birthdateError = document.getElementById('birthdate_error');
+  const membershipTypeField = document.getElementById('membership_type');
+  const membership_typeError = document.getElementById('membership_type_error');
+  const submembershipTypeField = document.getElementById('submembership_type');
+  const submembership_typeError = document.getElementById('submembership_type_error');
+
+  // --------------------------------------------------
+  // Attach On-Blur Validation to Each Field
+  // --------------------------------------------------
+
+  if (usernameField) attachValidation(usernameField, validateUsername);
+  if (emailField) attachValidation(emailField, validateEmail);
+  if (passwordField) attachValidation(passwordField, validatePassword);
+  if (confirmPasswordField) attachValidation(confirmPasswordField, validateConfirmPassword);
+  if (first_nameField) attachValidation(first_nameField, validateFirstName);
+  if (last_nameField) attachValidation(last_nameField, validateLastName);
+  if (phoneCountryCodeField) attachValidation(phoneCountryCodeField, validatePhoneCountryCode);
+  if (phone_area_code) attachValidation(phone_area_code, validatePhoneAreaCode);
+  if (phone_number) attachValidation(phone_number, validatePhoneNumber);
+  if (street_address) attachValidation(street_address, validateStreetAddress);
+  if (cityField) attachValidation(cityField, validateCity);
+  if (stateField) attachValidation(stateField, validateState);
+  if (zipField) attachValidation(zipField, validateZipCode);
+  if (birthdate) attachValidation(birthdate, validateBirthdate);
+  if (membershipTypeField) attachValidation(membershipTypeField, validateMembershipType);
+  if (submembershipTypeField) attachValidation(submembershipTypeField, validateSubmembershipType);
+
+  // --------------------------------------------------
+  // Final Submission Check
+  // --------------------------------------------------
+  const form = document.getElementById('profile_form');
+  form.addEventListener('submit', function(e) {
+    // Collect all fields for checking modifications.
+    const fields = [
+      usernameField, emailField, passwordField, confirmPasswordField,
+      first_nameField, last_nameField, phoneCountryCodeField, phone_area_code,
+      phone_number, street_address, cityField, stateField, zipField,
+      birthdate, membershipTypeField, submembershipTypeField
+    ];
+    // Check if any field was modified.
+    const anyModified = fields.some(field => field && field.modified);
+    if (!anyModified) {
+      // If no field was modified, prevent form submission and redirect home.
+      e.preventDefault();
+      window.location.href = '/';
+      return;
+    }
+    // Otherwise, validate the entire form. Prevent submission if invalid.
+    if (!validateForm()) {
+      e.preventDefault();
+    }
+  });
+
+});
+</script>
+{% endblock %}

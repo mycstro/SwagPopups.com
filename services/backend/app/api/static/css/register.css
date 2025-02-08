@@ -1,0 +1,213 @@
+/* styles.css */
+
+/* Container for the registration section */
+.cid-uC2ba133Jy {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    background: radial-gradient(circle at center, #035d6c, rgba(3, 92, 108, 0.750));
+    width: 60rem;
+    justify-self: center;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cid-uC2ba133Jy .register-form {
+    max-width: 600px;
+    margin: 4rem auto 4rem auto;        /* center horizontally, add some top/bottom space */
+    background-color: #035d6c;
+    padding: 2rem;
+    border-radius: 0.75rem;   /* slightly rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* The main headline in the form */
+  .register-form h1 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  /* The registration form itself */
+  .register-form form {
+    align-items: stretch;
+    margin-bottom: 1rem;
+  }
+
+  .register-inner {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .register-inner .identity-row,
+  .register-inner .password-row,
+  .register-inner .name-row,
+  .register-inner .phone-row {
+    display: inline-flex;
+    flex-direction: row;
+  }
+
+  .register-inner .address-col-1 {
+  margin: 0 auto 0 auto;
+  }
+
+  .register-inner .identity-row .identity-col-1 {
+    margin: 0 auto 0 auto;
+  }
+  .register-inner .identity-row .identity-col-2 {
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .password-row .password-col {
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .name-row .name-col {
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .phone-row .phone-col-2 {
+    margin: 0 auto 0 auto;
+    max-width: 8.5rem;
+  }
+  .register-inner .phone-row .phone-col-3 {
+    margin: 0 auto 0 auto;
+    max-width: 6rem;
+  }
+
+  .register-inner .phone-row .phone-col-9 {
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .address-col-1 .address-row-1 {
+    display: inline-flex;
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .address-col-1 .address-row-2 {
+    display: inline-flex;
+    margin: 0 auto 0 auto;
+  }
+
+  .register-inner .address-col-1 .address-row-2 .address-col-2 {
+    margin: 0 auto 0 auto;
+    margin-top: 0.5rem;
+  }
+  .register-inner .address-col-1 .address-row-2 .address-col-3 {
+    margin: 0 auto 0 auto;
+    margin-top: 0.5rem;
+  }
+  .register-inner .address-col-1 .address-row-2 .address-col-4 {
+    margin: 0 auto 0 auto;
+    margin-top: 0.5rem;
+  }
+
+  /* Input field for the user's email */
+  .form-group input[type="email"] {
+    margin-bottom: 1rem;
+  }
+  /* Input field for the user's password */
+  .form-group input[type="password"] {
+    margin-bottom: 1rem;
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem; /* about 6px of rounding */
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  /* The checkbox for the user's terms and conditions */
+    .form-group input[type="checkbox"] {
+        margin-bottom: 1rem;
+    }
+    /* The submit button */
+    .form-group input[type="submit"] {
+        margin-bottom: 1rem;
+    }
+    /* The registration success message */
+    .register-form p {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    /* The registration error message */
+    .register-form p.error {
+        color: #ff0033;
+    }
+    /* The registration success message styling */
+    .register-form p.success {
+        color: #00ff00;
+    }
+    /* The registration error message styling */
+    .register-form p.error {
+        color: #ff0033;
+    }
+
+  /* Each form-group container for a label and input */
+  .form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Labels for the inputs */
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #f7a206;
+    text-shadow: 2px 2px 4px black;
+  }
+  
+  /* Inputs, selects, textareas, etc. */
+  .form-group input,
+  .form-group select {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem; /* about 6px of rounding */
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  /* Focus styling for inputs */
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #7d9cff; /* a light bluish border on focus */
+  }
+  
+  /* The registration button styling */
+  .cid-uC2ba133Jy .btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #1d4ed8;      /* a deep blue color */
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 600;
+  }
+  
+  .cid-uC2ba133Jy .btn:hover {
+    background-color: #2563eb; /* a slightly lighter shade of blue on hover */
+  }
+  
+  /* The login link below the form */
+  .register-form p {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .register-form p a {
+    color: #1d4ed8;
+    text-decoration: none;
+  }
+  
+  .register-form p a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block navmarker %}<a href="/cart">Cart</a>{% endblock %}
+
+{% block maincontent %}
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td class="price">${{ item.product.price }}</td>
+                <td>
+                    <input type="number" value="{{ item.quantity }}" min="1">
+                </td>
+                <td>${{ item.total }}</td>
+                <td>
+                    <button>Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block subcontent %}
+    <div class="cart-summary">
+        <h2>Total: ${{ cart_total }}</h2>
+        <button>Proceed to Checkout</button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
