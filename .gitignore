@@ -55,6 +55,10 @@ coverage.xml
 *.mo
 *.pot
 
+# docker stuff:
+.dockerignore
+docker-compose.debug.yml
+
 # Django stuff:
 *.log
 local_settings.py
@@ -63,6 +67,7 @@ db.sqlite3-journal
 
 # Flask stuff:
 instance/
+flask_session/
 .webassets-cache
 
 # Scrapy stuff:
