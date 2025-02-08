@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # Import all the Resource classes from api_resources
 from .api_resources import (
-    Hello, Square, apiLogin, apiRegister, getSubmembershipTypes
+    Hello, Square, apiLogin, apiRegister, getSubmembershipTypes, GetAreaCodes
 )
 
 # Mock users (optional; remove if not needed)
@@ -426,3 +426,4 @@ api.add_resource(Square, '/api/square/<int:num>')
 api.add_resource(apiLogin, '/api/login')
 api.add_resource(apiRegister, '/api/register')
 api.add_resource(getSubmembershipTypes, '/api/submembership_types/<string:membership_type>')
+api.add_resource(GetAreaCodes, '/api/get_area_codes')

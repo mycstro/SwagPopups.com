@@ -1,4 +1,5 @@
 import datetime
+import requests
 import jwt
 
 from flask import request, jsonify, current_app
@@ -8,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Import your database and models
 from .models import db, User
+
+from .scripts import getAreaCodes
 
 # Example data structure for submembership types
 # (You might have this in a config or separate file)
@@ -35,6 +38,23 @@ class Square(Resource):
     def get(self, num):
         return jsonify({'square': num ** 2})
 
+class GetAreaCodes(Resource):
+
+    def get(self):
+        clean_df = getAreaCodes
+        url = "https://reports.nanpa.com/public/npa_report.csv"
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            try:
+                cleaned_df = clean_df.clean_and_filter_nanpa_df(response.content)
+                #print("Final Cleaned DataFrame:")
+                #print(cleaned_df.head())
+                data = cleaned_df.to_dict(orient="records")
+                return jsonify( data )
+            except Exception as e:
+                return jsonify("Error cleaning data:", str(e))
+        else:
+            return jsonify(f"Failed to download data. HTTP status code: {response.status_code}")
 
 class apiLogin(Resource):
     def get(self):

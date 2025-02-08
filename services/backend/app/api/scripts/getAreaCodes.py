@@ -1,76 +1,82 @@
 import pandas as pd
 import json
-from flask import requests
+import requests
+import io
 
-def download_nanpa_file(url, output_filename):
-    headers = {
-        # Mimic a common browser user-agent
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36',
-    }
+import pandas as pd
+
+pd.set_option('display.max_rows', 500)  # or use None to display all rows
+
+def clean_and_filter_nanpa_df(raw_data: bytes) -> pd.DataFrame:
+    """
+    Cleans up NANPA CSV data (provided as raw bytes) by:
+      1. Skipping the first row (e.g., file metadata/header) and reading the CSV data.
+      2. Keeping only the columns: NPA_ID, LOCATION, COUNTRY, and IN_SERVICE.
+      3. Removing any rows where IN_SERVICE is 'N' (case-insensitive).
+      4. Dropping the last column (IN_SERVICE) while preserving NPA_ID (if it is the first column).
+      5. Joining the LOCATION and COUNTRY columns (with a space) into a new column LOCATION_COUNTRY.
     
+    Parameters:
+        raw_data (bytes): The raw CSV data as bytes.
+
+    Returns:
+        pd.DataFrame: A DataFrame with NPA_ID (if present) and LOCATION_COUNTRY.
+    """
+    # Convert raw bytes to a string wrapped in a StringIO object.
+    dfg = io.StringIO(raw_data.decode('utf-8'))
+    dfg.seek(0)  # Ensure the pointer is at the start.
+
     try:
-        print("Attempting to download the file...")
-        response = requests.get(url, headers=headers, allow_redirects=True, timeout=30)
-        response.raise_for_status()  # Raises HTTPError for bad responses (4xx, 5xx)
-        
-        # Write content to file in binary mode
-        with open(output_filename, 'wb') as f:
-            f.write(response.content)
-        print(f"File downloaded successfully and saved as '{output_filename}'.")
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err} - {response.status_code}")
-    except requests.exceptions.ConnectionError as conn_err:
-        print(f"Connection error occurred: {conn_err}")
-    except requests.exceptions.Timeout as timeout_err:
-        print(f"Timeout error: {timeout_err}")
-    except requests.exceptions.RequestException as req_err:
-        print(f"An error occurred: {req_err}")
+        # Read the CSV data, skipping the first row which contains metadata.
+        df = pd.read_csv(dfg, skiprows=1)
+    except Exception as e:
+        raise RuntimeError(f"Error reading CSV data: {e}")
 
-# Load the Excel file (adjust the sheet name if needed)
-df = pd.read_excel("NANPA_area_codes.xlsx", sheet_name=0)
+    # Define the columns we want to keep.
+    columns_to_keep = ["NPA_ID", "LOCATION", "COUNTRY", "IN_SERVICE"]
 
-# Inspect the columns to find the area code column (change "Area Code" as needed)
-print(df.columns)
+    # Ensure all desired columns are present.
+    missing_cols = set(columns_to_keep) - set(df.columns)
+    if missing_cols:
+        raise ValueError(f"Missing expected columns in DataFrame: {missing_cols}")
 
-# Extract and clean the area codes column
-area_codes = df["Area Code"].dropna().unique().tolist()
+    # Keep only the specified columns.
+    df_clean = df[columns_to_keep].copy()
 
-# Optionally, sort the area codes
-area_codes.sort()
+    # Remove rows where IN_SERVICE equals "N" (ignoring extra whitespace and case).
+    df_clean = df_clean[df_clean["IN_SERVICE"].astype(str).str.strip().str.upper() != "N"]
 
-# Save the clean list to a JSON file for easy consumption later
-with open("area_codes.json", "w") as f:
-    json.dump(area_codes, f, indent=2)
+    # Drop only the last column ("IN_SERVICE"); do not remove NPA_ID.
+    df_temp = df_clean.drop(columns=["IN_SERVICE"]).copy()
 
-print("Extracted area codes:", area_codes)
+    # Join the LOCATION and COUNTRY columns with a space to form a new column.
+    # We assume these are the last two columns in df_temp.
+    df_temp["LOCATION_COUNTRY"] = df_temp["LOCATION"].astype(str) + " " + df_temp["COUNTRY"].astype(str)
 
-# Additional steps for further processing or analysis, e.g., creating a dictionary for faster lookup
+    # Final output: if NPA_ID exists, include it; otherwise, just the joined column.
+    if "NPA_ID" in df_temp.columns:
+        df_final = df_temp[["NPA_ID", "LOCATION_COUNTRY"]].copy()
+    else:
+        df_final = df_temp[["LOCATION_COUNTRY"]].copy()
 
-area_code_dict = {code: df[df["Area Code"] == code].iloc[0]["Area Name"].strip() for code in area_codes}
-print("Area code dictionary:", area_code_dict)
+    return df_final
 
-# Example usage of the area code dictionary:
-
-print(area_code_dict.get("555"))  # Output: "Pittsburgh"
-print(area_code_dict.get("123"))  # Output: None (not found)
-
-# You can now use this JSON file for faster lookups in your application or API.
-
-# To convert the JSON file back to a Pandas DataFrame for further processing:
-
-df_area_codes = pd.read_json("area_codes.json")
-print(df_area_codes)
-
-# Note: The JSON file is created in the same directory as the script, so make sure to adjust the file path if necessary.
-
-
+# -------------------------------
+# Example Usage:
+# -------------------------------
 if __name__ == "__main__":
-    url = "https://example.com/path/to/NANPA_area_codes.xlsx"
-    output_filename = "NANPA_area_codes.xlsx"
-    download_nanpa_file(url, output_filename)
-    # Continue with the remaining steps as described above.
-    # You can now use the "area_codes.json" file for further processing or analysis.
-    # Make sure to replace "https://example.com/path/to/NANPA_area_codes.xlsx" with the actual URL of the NANPA area code Excel file.
-    # Also, adjust the "output_filename" and "Area Code" column names as needed.
-    # After processing, you can save the clean list to a JSON file for easy consumption later.
-    
+    import requests
+
+    url = "https://reports.nanpa.com/public/npa_report.csv"
+    response = requests.get(url, stream=True)
+    if response.status_code == 200:
+        try:
+            cleaned_df = clean_and_filter_nanpa_df(response.content)
+            print("Final Cleaned DataFrame:")
+            print(cleaned_df.head())
+            print( cleaned_df)
+        except Exception as e:
+            print("Error cleaning data:", e)
+    else:
+        print(f"Failed to download data. HTTP status code: {response.status_code}")
+
